@@ -7,11 +7,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addProduct } from '../../features/productSlice';
 import { MdKeyboardBackspace } from 'react-icons/md';
 import { useNavigate } from "react-router-dom";
+import { Dropdown } from 'react-bootstrap';
 
 export default function AddProductPage() {
     const dispatch = useDispatch()
     const token = useSelector(state => state.user.token)
     const inputStyle = { input: { paddingLeft: "30px" } };
+    const [selectedCategory, setSelectedCategory] = useState("");
+
     const [formValue, setFormValue] = useState({
         name: "",
         description: "",
@@ -37,6 +40,13 @@ export default function AddProductPage() {
     const notify = () => toast("Product has been added successfully.");
 
     async function handleSubmit() {
+        for (const key in formValue) {
+            if (!formValue[key]) {
+                toast.error('All fields must be filled.');
+                return;
+            }
+        }
+
         console.log(formValue);
         await dispatch(addProduct({ ...formValue, token: token }))
         setFormValue({
@@ -50,7 +60,22 @@ export default function AddProductPage() {
         });
         setImage(null)
     }
-    
+
+    const categoryOptions = [
+        "Fashion",
+        "Footwear",
+        "Mobile",
+        "Camera",
+        "Skincare",
+        "Backpack",
+        "Laptop",
+    ];
+
+    const handleCategorySelect = (category) => {
+        setSelectedCategory(category);
+        setFormValue({ ...formValue, category: category });
+    };
+
     return (
 
         <div>
@@ -94,9 +119,31 @@ export default function AddProductPage() {
                 <label for="exampleFormControlInput1" class="form-label"><b>Product information</b></label>
                 <br></br>
                 <div className="d-flex justify-content-start" style={inputStyle.input}>
-                    <div>
-                        <label for="exampleFormControlInput1" class="form-label">Category</label>
-                        <input value={formValue.category} type="text" onChange={(e) => setFormValue({ ...formValue, category: e.target.value })} placeholder='Product Category' class="form-control" id="exampleFormControlInput1"></input>
+                    <div style={inputStyle.input}>
+                        <label htmlFor="categorySelect"><b>Category</b></label>
+                        <Dropdown>
+                            <Dropdown.Toggle
+                                style={{
+                                    backgroundColor: "#FFFFFF",
+                                    borderColor: "black",
+                                    color: "black",
+                                }}
+                                id="categorySelect"
+                            >
+                                {selectedCategory || 'Select category'}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu style={{ backgroundColor: "#FFFFFF" }}>
+                                {categoryOptions.map((category) => (
+                                    <Dropdown.Item
+                                        key={category}
+                                        onClick={() => handleCategorySelect(category)}
+                                        style={{ color: "black" }}
+                                    >
+                                        {category}
+                                    </Dropdown.Item>
+                                ))}
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </div>
                     <div style={{ marginLeft: "40px" }}>
                         <label for="exampleFormControlInput1" class="form-label">Brand</label>

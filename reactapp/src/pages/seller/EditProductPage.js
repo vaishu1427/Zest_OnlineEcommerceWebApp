@@ -5,13 +5,14 @@ import Footer from '../../components/common/Footer';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { fetchProductById, updateProduct, updateProductImage } from '../../features/productSlice';
-
 import { MdKeyboardBackspace } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Dropdown } from 'react-bootstrap';
 
 export default function EditProductPage() {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
+  const [imageChange, setImageChange] = useState(false);
   const productDetails = useSelector((state) => state.product.productDetails);
   const { productId } = useParams();
   const navigate = useNavigate();
@@ -56,6 +57,8 @@ export default function EditProductPage() {
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       dispatch(updateProductImage({ token: token, productId: productId, image: event.target.files[0] }))
+      setImageChange(true);
+      console.log(imageChange);
     }
   };
 
@@ -75,7 +78,7 @@ export default function EditProductPage() {
       (key) => updatedProduct[key] !== productDetails[key]
     );
 
-    if (hasFieldChanges) {
+    if (hasFieldChanges || imageChange) {
       dispatch(updateProduct({ token, productId, updatedProduct }))
         .then(() => {
           toast.success('Product updated successfully', {
@@ -91,10 +94,25 @@ export default function EditProductPage() {
       toast.info('No changes detected', {
         position: toast.POSITION.TOP_CENTER,
       });
+      setImageChange(false);
     }
   };
 
   const fileInputRef = useRef(null);
+
+  const categoryOptions = [
+    "Fashion",
+    "Footwear",
+    "Mobile",
+    "Camera",
+    "Skincare",
+    "Backpack",
+    "Laptop",
+  ];
+
+  const handleCategorySelect = (category) => {
+    setFormValue({ ...formValue, category: category });
+  };
 
   const handleEditImageButtonClick = () => {
     fileInputRef.current.click();
@@ -151,7 +169,7 @@ export default function EditProductPage() {
                 ref={fileInputRef}
                 onChange={onImageChange}
               />
-              <button style={{ backgroundColor: "#F25151" }} type="button" className="btn btn-light" onClick={handleEditImageButtonClick}>Change Image</button>
+              <button style={{ backgroundColor: "#F25151" }} type="button" className="btn btn-light" onClick={handleEditImageButtonClick}><b>Change Image</b></button>
             </div>
           </div>
         </div>
@@ -209,16 +227,29 @@ export default function EditProductPage() {
               <b>Category</b>
             </label>
 
-            <div>
-              <input
-                type="text"
-                onChange={(e) => setFormValue({ ...formValue, category: e.target.value })}
-                placeholder="Category"
-                className="form-control"
-                id="exampleFormControlInput1"
-                value={formValue.category}
-              />
-            </div>
+            <Dropdown>
+              <Dropdown.Toggle
+                style={{
+                  backgroundColor: "#FFFFFF",
+                  borderColor: "black",
+                  color: "black",
+                }}
+                id="categorySelect"
+              >
+                {formValue.category || 'Select category'}
+              </Dropdown.Toggle>
+              <Dropdown.Menu style={{ backgroundColor: "#FFFFFF" }}>
+                {categoryOptions.map((category) => (
+                  <Dropdown.Item
+                    key={category}
+                    onClick={() => handleCategorySelect(category)}
+                    style={{ color: "black" }}
+                  >
+                    {category}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
 
           <br />
@@ -282,7 +313,7 @@ export default function EditProductPage() {
             onClick={handleSubmit}
             disabled={!formValue.name || !formValue.price || !formValue.quantity}
           >
-            Save Changes
+            <b>Save Changes</b>
           </button>
         </div>
       </div>
