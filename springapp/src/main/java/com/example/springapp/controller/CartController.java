@@ -2,7 +2,7 @@ package com.example.springapp.controller;
 
 import com.example.springapp.BaseResponseDTO;
 import com.example.springapp.config.jwt.JwtTokenProvider;
-import com.example.springapp.config.user.UserRepository;
+import com.example.springapp.repo.UserRepository;
 import com.example.springapp.dto.request.CartRequestDto;
 import com.example.springapp.model.Cart;
 import com.example.springapp.model.Product;
@@ -29,6 +29,17 @@ public class CartController {
     @Autowired
     ProductService productService;
 
+    @GetMapping("/api/cart")
+    public ResponseEntity<BaseResponseDTO> getCartProducts(@RequestHeader(value = "Authorization", defaultValue = "") String token){
+        try{
+            User user = userRepository.findByEmail(tokenProvider.getUsernameFromToken(tokenProvider.getTokenFromHeader(token))).orElseThrow();
+            List<Cart> cartList = cartService.getCartProducts(user);
+            return ResponseEntity.ok(new BaseResponseDTO("success",cartList));
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(new BaseResponseDTO("failed"));
+        }
+    }
+
     @PostMapping("/api/cart")
     public ResponseEntity<BaseResponseDTO> addCartProduct(@RequestHeader(value = "Authorization", defaultValue = "") String token,@RequestBody CartRequestDto cartRequestDto){
         try{
@@ -41,12 +52,16 @@ public class CartController {
         }
     }
 
-    @GetMapping("/api/cart")
-    public ResponseEntity<BaseResponseDTO> getCartProducts(@RequestHeader(value = "Authorization", defaultValue = "") String token){
+    @PutMapping("/api/cart")
+    public ResponseEntity<BaseResponseDTO> updateCartProduct(@RequestHeader(value = "Authorization", defaultValue = "") String token,@RequestParam String cartId,@RequestParam String quantity){
         try{
             User user = userRepository.findByEmail(tokenProvider.getUsernameFromToken(tokenProvider.getTokenFromHeader(token))).orElseThrow();
-            List<Cart> cartList = cartService.getCartProducts(user);
-            return ResponseEntity.ok(new BaseResponseDTO("success",cartList));
+            if(cartService.hasUser(user,Integer.valueOf(cartId))){
+                cartService.updateCartProduct(Integer.valueOf(cartId),Integer.valueOf(quantity));
+                return ResponseEntity.ok(new BaseResponseDTO("success"));
+            }else {
+                return ResponseEntity.ok(new BaseResponseDTO("something went wrong"));
+            }
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(new BaseResponseDTO("failed"));
         }
@@ -58,21 +73,6 @@ public class CartController {
             User user = userRepository.findByEmail(tokenProvider.getUsernameFromToken(tokenProvider.getTokenFromHeader(token))).orElseThrow();
             if(cartService.hasUser(user,Integer.valueOf(cartId))){
                 cartService.deleteCartProduct(Integer.valueOf(cartId));
-                return ResponseEntity.ok(new BaseResponseDTO("success"));
-            }else {
-                return ResponseEntity.ok(new BaseResponseDTO("something went wrong"));
-            }
-        }catch (Exception e){
-            return ResponseEntity.internalServerError().body(new BaseResponseDTO("failed"));
-        }
-    }
-
-    @PutMapping("/api/cart")
-    public ResponseEntity<BaseResponseDTO> updateCartProduct(@RequestHeader(value = "Authorization", defaultValue = "") String token,@RequestParam String cartId,@RequestParam String quantity){
-        try{
-            User user = userRepository.findByEmail(tokenProvider.getUsernameFromToken(tokenProvider.getTokenFromHeader(token))).orElseThrow();
-            if(cartService.hasUser(user,Integer.valueOf(cartId))){
-                cartService.updateCartProduct(Integer.valueOf(cartId),Integer.valueOf(quantity));
                 return ResponseEntity.ok(new BaseResponseDTO("success"));
             }else {
                 return ResponseEntity.ok(new BaseResponseDTO("something went wrong"));

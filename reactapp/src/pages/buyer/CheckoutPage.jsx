@@ -10,14 +10,11 @@ import { fetchAddress } from '../../features/addressSlice';
 import { MdKeyboardBackspace } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import OrderPlaceModal from '../../components/buyer/OrderPlaceModal';
-import {createPurchase} from "../../api/purchaseService";
-
 
 
 export default function CheckoutPage() {
     const token = useSelector((state) => state.user.token);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
-    const [selectedAddress, setSelectedAddress] = useState(null);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchCart({ token: token }));
@@ -118,9 +115,9 @@ export default function CheckoutPage() {
                         <div className="card" style={{ backgroundColor: '#F4F4F4', marginRight: 75 }}>
                             {addressList.length === 0 ? (
                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center",marginTop:20 }}>
-                                            <h6 style={{ color: "grey" }}><b>Add address first</b></h6>
-                                        </div>
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: 20 }}>
+                                        <h6 style={{ color: "grey" }}><b>Add address first</b></h6>
+                                    </div>
                                 </div>
                             ) : (
                                 addressList.map((value, index) => (

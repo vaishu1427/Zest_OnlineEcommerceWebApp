@@ -1,8 +1,8 @@
 import { MdAccountCircle, MdLogout } from 'react-icons/md';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useRef, useState } from 'react';
-import {useNavigate} from "react-router-dom";
-import {useDispatch,useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
 import LogOutModal from '../common/LogOutModal';
 
 export default function AdminNavigationBar() {
@@ -11,7 +11,6 @@ export default function AdminNavigationBar() {
     const handleHideRemoveModal = () => setShowLogoutModal(false);
     const navigate = useNavigate();
     const target = useRef(null);
-    const dispatch = useDispatch() 
     const currentUser = useSelector(state => state.user.currentUser)
 
     async function handleLogout() {
@@ -38,12 +37,12 @@ export default function AdminNavigationBar() {
                             <Offcanvas.Body>
                                 <div class="list-group list-group-flush">
                                     <a href="/profile" class="list-group-item list-group-item-action"><MdAccountCircle style={{ width: 30, height: 20 }} />My Profile</a>
-                                    <a href="#" class="list-group-item list-group-item-action" onClick={()=>handleLogout()} ><MdLogout style={{ width: 30, height: 20 }} />Logout</a>
+                                    <a href="#" class="list-group-item list-group-item-action" onClick={() => handleLogout()} ><MdLogout style={{ width: 30, height: 20 }} />Logout</a>
                                 </div>
                             </Offcanvas.Body>
                         </Offcanvas>
                     </div>
-                    <LogOutModal show={showLogoutModal} handleHideRemoveModal={handleHideRemoveModal}/>
+                    <LogOutModal show={showLogoutModal} handleHideRemoveModal={handleHideRemoveModal} />
                 </div>
             </nav>
         </div>

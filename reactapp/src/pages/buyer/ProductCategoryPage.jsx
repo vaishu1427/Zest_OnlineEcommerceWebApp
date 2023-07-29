@@ -1,11 +1,11 @@
-import React, {useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import "../../pages/buyer/home.css"
 import NavigationBar from "../../components/common/NavigationBar";
 import { ReactComponent as NoResult } from '../../../src/assets/NoResult.svg';
 import { useNavigate } from "react-router-dom";
-import {MdKeyboardBackspace, MdOutlineFilterAlt} from 'react-icons/md';
-import {fetchProductByCategory} from "../../features/productSlice";
-import {useDispatch, useSelector} from "react-redux";
+import { MdKeyboardBackspace, MdOutlineFilterAlt } from 'react-icons/md';
+import { fetchProductByCategory } from "../../features/productSlice";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "../../components/buyer/Card";
 import FilterModal from "../../components/buyer/FilterModal";
 
@@ -16,10 +16,10 @@ export default function ProductCategoryPage() {
     const token = useSelector(state => state.user.token)
     const selectedCategory = useSelector(state => state.product.selectedCategory)
     const dispatch = useDispatch()
-    useEffect(()=>{
-        dispatch(fetchProductByCategory({token:token,category:selectedCategory}))
+    useEffect(() => {
+        dispatch(fetchProductByCategory({ token: token, category: selectedCategory }))
         console.log("Dispatched fetch product by category");
-    },[])
+    }, [])
     const categoryProductResult = useSelector(state => state.product.categoryProductResult)
     const handleGoBack = () => {
         navigate("/home")
@@ -27,7 +27,7 @@ export default function ProductCategoryPage() {
     const [selectedBrandFilters, setSelectedBrandFilters] = useState([]);
     const [selectedColorFilters, setSelectedColorFilters] = useState([]);
 
-    
+
     const handleBrandFilterChange = (brand) => {
         setSelectedBrandFilters(prevFilters => {
             if (prevFilters.includes(brand)) {
@@ -38,7 +38,7 @@ export default function ProductCategoryPage() {
         });
     };
 
-    
+
     const handleColorFilterChange = (color) => {
         setSelectedColorFilters(prevFilters => {
             if (prevFilters.includes(color)) {
@@ -49,15 +49,16 @@ export default function ProductCategoryPage() {
         });
     };
 
-    
+
     const filteredResults = categoryProductResult.filter(item => {
         const brandFilterPassed = selectedBrandFilters.length === 0 || selectedBrandFilters.includes(item.brand);
         const colorFilterPassed = selectedColorFilters.length === 0 || selectedColorFilters.includes(item.colour);
         return brandFilterPassed && colorFilterPassed;
     });
+
     return (
         <div>
-            <NavigationBar/><br/><br/><br/>
+            <NavigationBar /><br /><br /><br />
             <div className='d-flex flex-row align-items-center justify-content-between'>
                 <div className='d-flex flex-row align-items-center'>
                     <p className='ms-3'>
@@ -73,7 +74,7 @@ export default function ProductCategoryPage() {
                         </b>
                     </p>
                 </div>
-                <button onClick={() => setShowDropDown(!showDropDown)} type="button" className="btn btn-secondary me-3" style={{backgroundColor:"#F25151"}}>
+                <button onClick={() => setShowDropDown(!showDropDown)} type="button" className="btn btn-secondary me-3" style={{ backgroundColor: "#F25151" }}>
                     <MdOutlineFilterAlt style={{ marginRight: 5 }} /> Filter
                 </button>
             </div>
@@ -94,15 +95,16 @@ export default function ProductCategoryPage() {
                             </div>
                         </div>
                     ) : (
-                    <Card ProductList={filteredResults}/>
+                        <Card ProductList={filteredResults} />
                     )}
                 </div>
             </section>
+            
             <FilterModal show={showDropDown}
-                         onHide={handleCloseDropDown}
-                         categoryProductResult={categoryProductResult}
-                         onBrandFilterChange={handleBrandFilterChange}
-                         onColorFilterChange={handleColorFilterChange}/>
+                onHide={handleCloseDropDown}
+                categoryProductResult={categoryProductResult}
+                onBrandFilterChange={handleBrandFilterChange}
+                onColorFilterChange={handleColorFilterChange} />
         </div>
 
     )

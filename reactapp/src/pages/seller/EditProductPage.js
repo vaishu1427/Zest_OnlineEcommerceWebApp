@@ -1,10 +1,10 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import SellerNavigationBar from '../../components/seller/SellerNavigationBar';
 import Footer from '../../components/common/Footer';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {fetchProductById, updateProduct, updateProductImage} from '../../features/productSlice';
+import { fetchProductById, updateProduct, updateProductImage } from '../../features/productSlice';
 
 import { MdKeyboardBackspace } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -45,8 +45,8 @@ export default function EditProductPage() {
         quantity: productDetails.quantity || '',
       });
       const imageSrc = `data:image/jpeg;base64,${productDetails.image}`;
-        setSystemImage(imageSrc);
-      }
+      setSystemImage(imageSrc);
+    }
   }, [productDetails]);
 
   const handleGoBack = () => {
@@ -55,51 +55,51 @@ export default function EditProductPage() {
 
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
-      dispatch(updateProductImage({token:token,productId:productId,image:event.target.files[0]}))
+      dispatch(updateProductImage({ token: token, productId: productId, image: event.target.files[0] }))
     }
   };
 
- const handleSubmit = () => {
-  const updatedProduct = {
-    name: formValue.name,
-    description: formValue.description,
-    price: parseFloat(formValue.price),
-    category: formValue.category,
-    brand: formValue.brand,
-    colour: formValue.colour,
-    quantity: parseInt(formValue.quantity)
-  };
+  const handleSubmit = () => {
+    const updatedProduct = {
+      name: formValue.name,
+      description: formValue.description,
+      price: parseFloat(formValue.price),
+      category: formValue.category,
+      brand: formValue.brand,
+      colour: formValue.colour,
+      quantity: parseInt(formValue.quantity)
+    };
 
-  // Check if any field has been modified
-  const hasFieldChanges = Object.keys(updatedProduct).some(
-    (key) => updatedProduct[key] !== productDetails[key]
-  );
+    // Check if any field has been modified
+    const hasFieldChanges = Object.keys(updatedProduct).some(
+      (key) => updatedProduct[key] !== productDetails[key]
+    );
 
-  if (hasFieldChanges) {
-    dispatch(updateProduct({ token, productId, updatedProduct }))
-      .then(() => {
-        toast.success('Product updated successfully', {
-          position: toast.POSITION.TOP_CENTER,
+    if (hasFieldChanges) {
+      dispatch(updateProduct({ token, productId, updatedProduct }))
+        .then(() => {
+          toast.success('Product updated successfully', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        })
+        .catch(() => {
+          toast.error('Failed to update product', {
+            position: toast.POSITION.TOP_CENTER,
+          });
         });
-      })
-      .catch(() => {
-        toast.error('Failed to update product', {
-          position: toast.POSITION.TOP_CENTER,
-        });
+    } else {
+      toast.info('No changes detected', {
+        position: toast.POSITION.TOP_CENTER,
       });
-  } else {
-    toast.info('No changes detected', {
-      position: toast.POSITION.TOP_CENTER,
-    });
-  }
-};
+    }
+  };
 
   const fileInputRef = useRef(null);
 
   const handleEditImageButtonClick = () => {
     fileInputRef.current.click();
   };
-  
+
 
   return (
     <div>
@@ -145,13 +145,13 @@ export default function EditProductPage() {
           <div className="mt-3 mb-3">
             <div>
               <input
-                  type="file"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  ref={fileInputRef}
-                  onChange={onImageChange}
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                ref={fileInputRef}
+                onChange={onImageChange}
               />
-              <button style={{backgroundColor:"#F25151"}} type="button" className="btn btn-light" onClick={handleEditImageButtonClick}>Change Image</button>
+              <button style={{ backgroundColor: "#F25151" }} type="button" className="btn btn-light" onClick={handleEditImageButtonClick}>Change Image</button>
             </div>
           </div>
         </div>
@@ -204,57 +204,57 @@ export default function EditProductPage() {
         <label for="exampleFormControlInput1" class="form-label"><b>Product information</b></label>
         <br></br>
         <div className="d-flex justify-content-start" style={inputStyle.input}>
-         <div>
-        <label htmlFor="exampleFormControlInput1" className="form-label">
-          <b>Category</b>
-        </label>
-        
-        <div>
-          <input
-            type="text"
-            onChange={(e) => setFormValue({ ...formValue, category: e.target.value })}
-            placeholder="Category"
-            className="form-control"
-            id="exampleFormControlInput1"
-            value={formValue.category}
-          />
-        </div>
-        </div> 
-        
-        <br />
-        <div style={{ marginLeft: "40px" }}>
+          <div>
+            <label htmlFor="exampleFormControlInput1" className="form-label">
+              <b>Category</b>
+            </label>
 
-        <label htmlFor="exampleFormControlInput1" className="form-label">
-          <b>Brand</b>
-        </label>
-        <div >
-          <input
-            type="text"
-            onChange={(e) => setFormValue({ ...formValue, brand: e.target.value })}
-            placeholder="Brand"
-            className="form-control"
-            id="exampleFormControlInput1"
-            value={formValue.brand}
-          />
-        </div>
-        </div>
-        <br />
-        <div style={{ marginLeft: "40px" }}>
+            <div>
+              <input
+                type="text"
+                onChange={(e) => setFormValue({ ...formValue, category: e.target.value })}
+                placeholder="Category"
+                className="form-control"
+                id="exampleFormControlInput1"
+                value={formValue.category}
+              />
+            </div>
+          </div>
 
-        <label htmlFor="exampleFormControlInput1" className="form-label">
-          <b>Colour</b>
-        </label>
-        <div>
-          <input
-            type="text"
-            onChange={(e) => setFormValue({ ...formValue, colour: e.target.value })}
-            placeholder="Colour"
-            className="form-control"
-            id="exampleFormControlInput1"
-            value={formValue.colour}
-          />
-        </div>
-        </div>
+          <br />
+          <div style={{ marginLeft: "40px" }}>
+
+            <label htmlFor="exampleFormControlInput1" className="form-label">
+              <b>Brand</b>
+            </label>
+            <div >
+              <input
+                type="text"
+                onChange={(e) => setFormValue({ ...formValue, brand: e.target.value })}
+                placeholder="Brand"
+                className="form-control"
+                id="exampleFormControlInput1"
+                value={formValue.brand}
+              />
+            </div>
+          </div>
+          <br />
+          <div style={{ marginLeft: "40px" }}>
+
+            <label htmlFor="exampleFormControlInput1" className="form-label">
+              <b>Colour</b>
+            </label>
+            <div>
+              <input
+                type="text"
+                onChange={(e) => setFormValue({ ...formValue, colour: e.target.value })}
+                placeholder="Colour"
+                className="form-control"
+                id="exampleFormControlInput1"
+                value={formValue.colour}
+              />
+            </div>
+          </div>
         </div>
         <br />
 
@@ -276,7 +276,7 @@ export default function EditProductPage() {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
           <button
             type="button"
-            
+
             className="btn btn-danger"
             style={{ backgroundColor: "#F25151", color: "black", width: 200 }}
             onClick={handleSubmit}

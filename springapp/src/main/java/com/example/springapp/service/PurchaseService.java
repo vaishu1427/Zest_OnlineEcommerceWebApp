@@ -21,7 +21,7 @@ public class PurchaseService {
 
     @Autowired
     public PurchaseService(PurchaseRepository purchaseRepository, ProductRepository productRepository,
-            ReviewRepository reviewRepository,CartRepository cartRepository) {
+                           ReviewRepository reviewRepository, CartRepository cartRepository) {
         this.purchaseRepository = purchaseRepository;
         this.productRepository = productRepository;
         this.reviewRepository = reviewRepository;
@@ -30,8 +30,8 @@ public class PurchaseService {
 
     public List<Purchase> makePurchase(List<Integer> cartIds, String paymentMethod) {
         List<Purchase> purchases = new ArrayList<>();
-        for (Integer cartId: cartIds
-             ) {
+        for (Integer cartId : cartIds
+        ) {
             Cart cart = cartRepository.findById(cartId).orElseThrow();
             Purchase purchase = new Purchase();
             purchase.setPurchaseDate(new Date());
@@ -41,7 +41,7 @@ public class PurchaseService {
             purchase.setBuyer(cart.getBuyer());
             purchases.add(purchase);
             Product product = cart.getProduct();
-            product.setQuantity(product.getQuantity()- purchase.getQuantity());
+            product.setQuantity(product.getQuantity() - purchase.getQuantity());
             cartRepository.delete(cart);
             productRepository.save(product);
         }
@@ -74,7 +74,7 @@ public class PurchaseService {
                 purchaseMap.put("purchaseDate", purchase.getPurchaseDate());
 
                 // Retrieve review details
-                List<Review> reviews = reviewRepository.findByPurchaseId((long)purchase.getId());
+                List<Review> reviews = reviewRepository.findByPurchaseId((long) purchase.getId());
                 if (!reviews.isEmpty()) {
                     Review review = reviews.get(0); // Assuming the list contains only one review per purchaseId
                     purchaseMap.put("comment", review.getComment());
@@ -106,5 +106,4 @@ public class PurchaseService {
     }
 
 
-    
 }

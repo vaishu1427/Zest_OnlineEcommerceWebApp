@@ -17,7 +17,7 @@ public class Review {
     private Long buyerId;
     private int rating;
 
-    @Column(length=10000)
+    @Column(length = 10000)
     private String comment;
     private Long purchaseId;
 
@@ -27,7 +27,7 @@ public class Review {
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
-    private  Date updatedAt;
+    private Date updatedAt;
 
     // Constructors
 

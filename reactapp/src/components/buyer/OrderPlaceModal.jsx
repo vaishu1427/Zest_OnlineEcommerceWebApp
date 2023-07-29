@@ -2,8 +2,8 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {addPurchase} from "../../features/purchaseSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addPurchase } from "../../features/purchaseSlice";
 
 export default function OrderPlaceModal(props) {
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ export default function OrderPlaceModal(props) {
         return cartIds
     }
     async function handlePurchase() {
-        await dispatch(addPurchase({token: token, cartIds: getCartIds(),paymentMethod:props.payment}))
+        await dispatch(addPurchase({ token: token, cartIds: getCartIds(), paymentMethod: props.payment }))
         navigate("/orderplaced")
     }
 

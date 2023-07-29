@@ -1,7 +1,6 @@
 package com.example.springapp.model;
 
 
-import com.example.springapp.model.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -18,25 +17,25 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name="name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name="description", nullable = false, length=10000)
+    @Column(name = "description", nullable = false, length = 10000)
     private String description;
 
-    @Column(name="price", nullable = false)
+    @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name="quantity", nullable = false)
+    @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Column(name="brand", nullable = false)
+    @Column(name = "brand", nullable = false)
     private String brand;
 
-    @Column(name="colour", nullable = false)
+    @Column(name = "colour", nullable = false)
     private String colour;
 
-    @Column(name = "image", nullable = false,length = 1048576)
+    @Column(name = "image", nullable = false, length = 1048576)
     private byte[] image;
 
     @ManyToOne
@@ -44,7 +43,7 @@ public class Product {
     private User seller;
 
 
-    @Column(name="category", nullable = false)
+    @Column(name = "category", nullable = false)
     private String category;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -54,7 +53,7 @@ public class Product {
     private Date createdAt;
 
     @UpdateTimestamp
-    private  Date updatedAt;
+    private Date updatedAt;
 
     public Product(String name, String description, Double price, int quantity, String brand, String colour, byte[] image, User seller, String category) {
         this.name = name;

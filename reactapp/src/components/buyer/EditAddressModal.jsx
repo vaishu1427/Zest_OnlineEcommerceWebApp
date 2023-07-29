@@ -1,23 +1,24 @@
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addAddress, fetchAddress } from "../../features/addressSlice";
+import { addAddress, fetchAddress, fetchAddressById } from "../../features/addressSlice";
 
-export default function AddAddressModal(props) {
+export default function EditAddressModal(props) {
     const [formValue, setFormValue] = useState({});
     const dispatch = useDispatch()
     const token = useSelector(state => state.user.token)
-
+    useEffect(() => {
+        dispatch(fetchAddressById({ addressId: props.addressid }))
+    }, [])
     async function handleSubmit() {
         await dispatch(addAddress({ ...formValue, token: token }))
-        await dispatch(fetchAddress({ token: token }))
+        dispatch(fetchAddress({ token: token }))
         props.onHide()
     }
-    
     return (
         <Offcanvas placement={'end'} show={props.show} onHide={() => props.onHide()}>
             <Offcanvas.Header closeButton>
-                <Offcanvas.Title><b>Add Address</b></Offcanvas.Title>
+                <Offcanvas.Title><b>Edit Address</b></Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
                 <div class="container">

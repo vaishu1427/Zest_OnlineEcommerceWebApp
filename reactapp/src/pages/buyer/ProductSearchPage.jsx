@@ -1,11 +1,11 @@
-import React, {useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import "../../pages/buyer/home.css"
 import { ReactComponent as NoResult } from '../../../src/assets/NoResult.svg';
 import NavigationBar from "../../components/common/NavigationBar";
 import { useNavigate } from "react-router-dom";
-import {MdKeyboardBackspace,MdOutlineFilterAlt} from 'react-icons/md';
-import {fetchProductByCategory, fetchProductByQuery} from "../../features/productSlice";
-import {useDispatch, useSelector} from "react-redux";
+import { MdKeyboardBackspace, MdOutlineFilterAlt } from 'react-icons/md';
+import { fetchProductByCategory, fetchProductByQuery } from "../../features/productSlice";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "../../components/buyer/Card";
 import FilterModal from "../../components/buyer/FilterModal";
 
@@ -15,14 +15,14 @@ export default function ProductSearchPage() {
     const handleCloseDropDown = () => setShowDropDown(false);
     const token = useSelector(state => state.user.token)
     const searchQuery = useSelector(state => state.product.searchQuery)
-    console.log("query---------",searchQuery);
+    console.log("query---------", searchQuery);
     const searchProductResult = useSelector(state => state.product.searchProductResult)
-    console.log("searchProducts---",searchProductResult);
+    console.log("searchProducts---", searchProductResult);
     const dispatch = useDispatch()
-    useEffect(()=>{
+    useEffect(() => {
         console.log("----yesss");
-        dispatch(fetchProductByQuery({token:token,query:searchQuery}))
-    },[searchQuery])
+        dispatch(fetchProductByQuery({ token: token, query: searchQuery }))
+    }, [searchQuery])
 
     console.log(searchProductResult)
     const handleGoBack = () => {
@@ -31,7 +31,7 @@ export default function ProductSearchPage() {
     const [selectedBrandFilters, setSelectedBrandFilters] = useState([]);
     const [selectedColorFilters, setSelectedColorFilters] = useState([]);
 
-    
+
     const handleBrandFilterChange = (brand) => {
         setSelectedBrandFilters(prevFilters => {
             if (prevFilters.includes(brand)) {
@@ -42,7 +42,7 @@ export default function ProductSearchPage() {
         });
     };
 
-    
+
     const handleColorFilterChange = (color) => {
         setSelectedColorFilters(prevFilters => {
             if (prevFilters.includes(color)) {
@@ -53,7 +53,7 @@ export default function ProductSearchPage() {
         });
     };
 
-    
+
     const filteredResults = searchProductResult.filter(item => {
         const brandFilterPassed = selectedBrandFilters.length === 0 || selectedBrandFilters.includes(item.brand);
         const colorFilterPassed = selectedColorFilters.length === 0 || selectedColorFilters.includes(item.colour);
@@ -62,13 +62,13 @@ export default function ProductSearchPage() {
 
     return (
         <div>
-            <NavigationBar/><br/><br/><br/>
+            <NavigationBar /><br /><br /><br />
             <div className='d-flex flex-row align-items-center justify-content-between'>
-            <div className='d-flex flex-row align-items-center'>
-                <p className='ms-3' ><MdKeyboardBackspace style={{color:"grey"}} onClick={handleGoBack}/>{" "}<a href="#" style={{color:"grey"}} onClick={handleGoBack}>Back</a></p>
-                <p className='ms-3' style={{fontSize:20}}><b>Search results for{" "}<span style={{fontSize:20,color:"dodgerblue"}}>{`"${searchQuery}"`}</span></b></p>
-            </div>
-            <button onClick={() => setShowDropDown(!showDropDown)} type="button" className="btn btn-secondary me-3" style={{backgroundColor:"#F25151"}}>
+                <div className='d-flex flex-row align-items-center'>
+                    <p className='ms-3' ><MdKeyboardBackspace style={{ color: "grey" }} onClick={handleGoBack} />{" "}<a href="#" style={{ color: "grey" }} onClick={handleGoBack}>Back</a></p>
+                    <p className='ms-3' style={{ fontSize: 20 }}><b>Search results for{" "}<span style={{ fontSize: 20, color: "dodgerblue" }}>{`"${searchQuery}"`}</span></b></p>
+                </div>
+                <button onClick={() => setShowDropDown(!showDropDown)} type="button" className="btn btn-secondary me-3" style={{ backgroundColor: "#F25151" }}>
                     <MdOutlineFilterAlt style={{ marginRight: 5 }} /> Filter
                 </button>
             </div>
@@ -88,15 +88,16 @@ export default function ProductSearchPage() {
                             </div>
                         </div>
                     ) : (
-                    <Card ProductList={filteredResults}/>
+                        <Card ProductList={filteredResults} />
                     )}
                 </div>
             </section>
+            
             <FilterModal show={showDropDown}
-                         onHide={handleCloseDropDown}
-                         categoryProductResult={searchProductResult}
-                         onBrandFilterChange={handleBrandFilterChange}
-                         onColorFilterChange={handleColorFilterChange}/>
+                onHide={handleCloseDropDown}
+                categoryProductResult={searchProductResult}
+                onBrandFilterChange={handleBrandFilterChange}
+                onColorFilterChange={handleColorFilterChange} />
         </div>
 
     )

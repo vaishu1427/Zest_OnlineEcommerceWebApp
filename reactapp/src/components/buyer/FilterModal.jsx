@@ -15,25 +15,25 @@ export default function FilterModal(props) {
           <div>
             <h6>Brand</h6>
             {brands.map((brand) => (
-                <Form.Check
-                    key={brand}
-                    type="checkbox"
-                    id={brand}
-                    label={brand}
-                    onChange={() => props.onBrandFilterChange(brand)}
-                />
+              <Form.Check
+                key={brand}
+                type="checkbox"
+                id={brand}
+                label={brand}
+                onChange={() => props.onBrandFilterChange(brand)}
+              />
             ))}
           </div>
           <div>
             <h6>Color</h6>
             {colors.map((color) => (
-                <Form.Check
-                    key={color}
-                    type="checkbox"
-                    id={color}
-                    label={color}
-                    onChange={() => props.onColorFilterChange(color)}
-                />
+              <Form.Check
+                key={color}
+                type="checkbox"
+                id={color}
+                label={color}
+                onChange={() => props.onColorFilterChange(color)}
+              />
             ))}
           </div>
         </Offcanvas.Body>

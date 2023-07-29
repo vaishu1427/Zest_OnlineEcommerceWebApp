@@ -1,10 +1,10 @@
 import axios from "axios";
-import {baseUrl} from "./config";
+import { baseUrl } from "./config";
 const baseURL = "http://localhost:8080";
 
 export async function getPurchaseByProduct(token, productId) {
   return await axios.get(`${baseUrl}/seller/product/purchase?productId=${productId}`, {
-    headers: {Authorization: `Bearer ${token}`}
+    headers: { Authorization: `Bearer ${token}` }
   })
 }
 
@@ -17,23 +17,21 @@ export function getPurchaseByBuyerId(buyerId) {
   return axios(config);
 }
 
-
-
-export async function createPurchase(token,body){
-  return await axios.post(`${baseUrl}/purchase`,{
-    "cartIds":body.cartIds,
-    "paymentMethod":body.paymentMethod
-  },{
-    headers: { Authorization: `Bearer ${token}`}
-  })
-}
-
-
-export async function getPurchaseByBuyer(token){
-  return await axios.get(`${baseUrl}/purchase/buyer`,{
+export async function createPurchase(token, body) {
+  return await axios.post(`${baseUrl}/purchase`, {
+    "cartIds": body.cartIds,
+    "paymentMethod": body.paymentMethod
+  }, {
     headers: { Authorization: `Bearer ${token}` }
   })
 }
-export async function getPurchaseByBuyerIdd(id){
+
+export async function getPurchaseByBuyer(token) {
+  return await axios.get(`${baseUrl}/purchase/buyer`, {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+}
+
+export async function getPurchaseByBuyerIdd(id) {
   return await axios.get(`${baseUrl}/auth/buyer/${id}`);
 }

@@ -1,20 +1,21 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import {useDispatch, useSelector} from "react-redux";
-import {deleteProduct, fetchProduct} from "../../features/productSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteProduct, fetchProduct } from "../../features/productSlice";
 
 
 export default function ProductsRemoveModal(props) {
   const token = useSelector(state => state.user.token)
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
   console.log(props.productId)
-    async function handleDeleteProduct(){
 
-        await dispatch(deleteProduct({ token: token, productId: props.productId }))
-        await dispatch(fetchProduct({token:token}))
-        console.log("product deleted")
-        props.handleHideRemoveModal()
-    }
+  async function handleDeleteProduct() {
+    await dispatch(deleteProduct({ token: token, productId: props.productId }))
+    await dispatch(fetchProduct({ token: token }))
+    console.log("product deleted")
+    props.handleHideRemoveModal()
+  }
+  
   return (
     <Modal show={props.show} onHide={props.handleHideRemoveModal} centered>
       <Modal.Header closeButton>
@@ -24,7 +25,7 @@ export default function ProductsRemoveModal(props) {
         <Button variant="secondary" onClick={props.handleHideRemoveModal}>
           No, Cancel
         </Button>
-        <Button variant="primary" style={{backgroundColor:"#F25151"}} onClick={() => handleDeleteProduct()}>
+        <Button variant="primary" style={{ backgroundColor: "#F25151" }} onClick={() => handleDeleteProduct()}>
           Yes, Remove
         </Button>
       </Modal.Footer>

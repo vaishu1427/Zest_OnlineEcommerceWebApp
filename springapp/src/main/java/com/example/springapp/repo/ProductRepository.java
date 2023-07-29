@@ -1,25 +1,18 @@
 package com.example.springapp.repo;
 
-import com.example.springapp.dto.response.SellerDashboardResponse;
 import com.example.springapp.model.Product;
 import com.example.springapp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
-import javax.persistence.SqlResultSetMapping;
+
 import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> findAllByCategory(String cat);
-
-    List<Product> findAllBySeller(User seller);
-
-    List<Product> findByNameContainingIgnoreCase(String name);
 
     @Query(value = "SELECT "
             + "SUM(CASE WHEN pt.product_id IS NOT NULL THEN p.price * pt.quantity ELSE 0 END) AS totalRevenue, "
@@ -39,7 +32,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "FROM review AS r " +
             "INNER JOIN product AS p ON r.product_id = p.id " +
             "INNER JOIN user AS u ON r.buyer_id = u.id " +
-            "WHERE p.id = ?1",nativeQuery = true)
+            "WHERE p.id = ?1", nativeQuery = true)
     List<Object[]> getProductReviews(int productId);
 
     List<Product> findAllByIsDeletedFalse();

@@ -35,7 +35,7 @@ public class Address {
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
-    private  Date updatedAt;
+    private Date updatedAt;
 
     public int getId() {
         return id;

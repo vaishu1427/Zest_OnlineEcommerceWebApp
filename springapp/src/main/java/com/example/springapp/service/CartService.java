@@ -18,7 +18,7 @@ public class CartService {
     CartRepository cartRepository;
 
     public void addCartProduct(User user, Product product, int quantity) {
-        Cart cart = new Cart(user,product,quantity);
+        Cart cart = new Cart(user, product, quantity);
         cartRepository.save(cart);
     }
 

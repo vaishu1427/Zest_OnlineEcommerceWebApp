@@ -1,6 +1,5 @@
 package com.example.springapp.service;
 
-import com.example.springapp.model.Cart;
 import com.example.springapp.model.Product;
 import com.example.springapp.model.QA;
 import com.example.springapp.model.User;
@@ -21,7 +20,7 @@ public class QAService {
     ProductRepository productRepository;
 
     public void addquestion(User user, Product product, String question) {
-        QA qa = new QA(user,product,question);
+        QA qa = new QA(user, product, question);
         qa.setStatus("Unanswered");
         qaRepository.save(qa);
     }
@@ -34,7 +33,7 @@ public class QAService {
     }
 
     public List<QA> getqa(User user) {
-        System.out.println("------seervice-"+user.getEmail());
+        System.out.println("------seervice-" + user.getEmail());
         return qaRepository.findByBuyer(user);
     }
 
@@ -44,11 +43,11 @@ public class QAService {
     }
 
     public List<QA> getqaBySellerId(int sellerId) {
-        System.out.println("-seller id---"+sellerId);
-        try{
-            List<QA> all= qaRepository.findAllBySellerId(sellerId);
+        System.out.println("-seller id---" + sellerId);
+        try {
+            List<QA> all = qaRepository.findAllBySellerId(sellerId);
             return all;
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
         }

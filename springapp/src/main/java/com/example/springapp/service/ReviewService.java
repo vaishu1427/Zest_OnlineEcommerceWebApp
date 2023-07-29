@@ -1,7 +1,6 @@
 package com.example.springapp.service;
 
 import com.example.springapp.exception.ReviewNotFoundException;
-import com.example.springapp.model.Product;
 import com.example.springapp.model.Purchase;
 import com.example.springapp.model.Review;
 import com.example.springapp.repo.ProductRepository;

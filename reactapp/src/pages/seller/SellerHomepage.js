@@ -9,13 +9,13 @@ export default function SellerHomePage() {
     return (
         <div>
 
-            <SellerNavigationBar/>
+            <SellerNavigationBar />
             <DashBoard />
-            <br/>
+            <br />
             <ProductHeader />
-            <AllProducts/><br/>
-            <Footer/>
-            
+            <AllProducts /><br />
+            <Footer />
+
         </div>
     );
 }

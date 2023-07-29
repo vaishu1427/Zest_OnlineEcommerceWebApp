@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createUserService, loginUserService,disabledBuyerById,deletedBuyerById,getAllUser, getUserById,updateUserById  } from "../api/userService";
-import {toast} from "react-toastify";
+import { createUserService, loginUserService, disabledBuyerById, deletedBuyerById, getAllUser, getUserById, updateUserById } from "../api/userService";
+import { toast } from "react-toastify";
 
 export const loginUser =
     createAsyncThunk('user/loginUser', async (body) => {
@@ -36,55 +36,40 @@ export const fetchAllUsers =
         })
     })
 
-
-export const fetchUserById =
-    createAsyncThunk('user/fetchUserById', async (body) => {
-        console.log("from slice")
-        console.log(body)
-        return getUserById(
-            body.token,
-            body.id
-        ).then((res) => {
-            return res.data
-        }).catch((err) => {
-            return err.response.data
-        })
-    })
-
-    export const updateUser = createAsyncThunk(
-        'user/updateUser',
-        async ({ token, id, updatedUser }) => {
-          try {
+export const updateUser = createAsyncThunk(
+    'user/updateUser',
+    async ({ token, id, updatedUser }) => {
+        try {
             const response = await updateUserById(token, id, updatedUser);
             return response.data;
-          } catch (error) {
+        } catch (error) {
             throw error;
-          }
         }
-    );
+    }
+);
 
-   export const disableBuyer = createAsyncThunk(
-        'user/disableBuyer',
-        async ({ token, id }) => {
-          try {
+export const disableBuyer = createAsyncThunk(
+    'user/disableBuyer',
+    async ({ token, id }) => {
+        try {
             const response = await disabledBuyerById(token, id);
             return response.data;
-          } catch (error) {
+        } catch (error) {
             throw error;
-          }
         }
-    );
-    export const deleteBuyer = createAsyncThunk(
-        'user/deleteBuyer',
-        async ({ token, id }) => {
-          try {
+    }
+);
+export const deleteBuyer = createAsyncThunk(
+    'user/deleteBuyer',
+    async ({ token, id }) => {
+        try {
             const response = await deletedBuyerById(token, id);
             return response.data;
-          } catch (error) {
+        } catch (error) {
             throw error;
-          }
         }
-    );
+    }
+);
 export const userSlice = createSlice({
     name: "user",
     initialState: {
@@ -97,24 +82,24 @@ export const userSlice = createSlice({
             id: ''
         },
         token: null,
-        signupInProgress:false,
-        signinInProgress:false,
+        signupInProgress: false,
+        signinInProgress: false,
         signinSuccess: false,
         signupSuccess: false,
         fetchUserInProcess: false,
         allUserList: [],
-        allActionList:[],
-        selectedUser:''
+        allActionList: [],
+        selectedUser: ''
     },
     reducers: {
         signup: (state, actions) => {
             console.log(actions.payload)
 
         },
-        setSelectedUser:(state,action) =>{
+        setSelectedUser: (state, action) => {
             state.selectedUser = action.payload.id
         },
-        
+
 
     },
     extraReducers: {
@@ -126,7 +111,7 @@ export const userSlice = createSlice({
             state.signinInProgress = false
             console.log("Fulfilled")
             console.log(action)
-            if(action.payload !== undefined){
+            if (action.payload !== undefined) {
                 if (action.payload.message === "success") {
                     state.token = action.payload.data.token
                     state.currentUser.firstName = action.payload.data.currentUser.firstName
@@ -141,7 +126,7 @@ export const userSlice = createSlice({
                         position: toast.POSITION.TOP_CENTER
                     });
                 }
-            }else {
+            } else {
                 toast.error("Try again after sometime", {
                     position: toast.POSITION.TOP_CENTER
                 });
@@ -159,7 +144,7 @@ export const userSlice = createSlice({
         [signupUser.fulfilled]: (state, action) => {
             console.log("Fulfilled")
             state.signupInProgress = false
-            if(action.payload !== undefined){
+            if (action.payload !== undefined) {
                 if (action.payload.message === "success") {
                     state.signupSuccess = true
                     toast('Account Created Successfully', {
@@ -171,7 +156,7 @@ export const userSlice = createSlice({
                     });
                     //alert(action.payload.message)
                 }
-            }else {
+            } else {
                 toast.error("Try again after sometime", {
                     position: toast.POSITION.TOP_CENTER
                 });
@@ -187,11 +172,11 @@ export const userSlice = createSlice({
             console.log("pending")
         },
         [fetchAllUsers.fulfilled]: (state, action) => {
-            if(action.payload){
-                state.allUserList =action.payload
+            if (action.payload) {
+                state.allUserList = action.payload
                 console.log("Users fetched")
                 console.log(state.allUserList)
-            }else{
+            } else {
                 console.log("User Not fetched")
             }
             state.fetchUserInProcess = false
@@ -200,27 +185,7 @@ export const userSlice = createSlice({
             state.fetchUserInProcess = false
             console.log("Users fetch failed")
         },
-        [fetchUserById.pending]: (state) => {
-            state.fetchUserInProcess = true
-            console.log("pending")
-        },
-        [fetchUserById.fulfilled]: (state, action) => {
-            if(action.payload.message ==="success"){
-                state.userDetails = action.payload.data
-                console.log("Users fetched")
-                console.log(state.userList)
-            }else {
-                console.log(action.payload.message)
-            }
-            state.fetchUserInProcess = false;
-        },
-        [fetchUserById.rejected]: (state) => {
-            state.fetchUserInProcess = false;
-            console.log("Fetching user by ID failed");
-            
-        },
         [updateUser.fulfilled]: (state, action) => {
-            // Assuming the response data includes the updated product details
             state.currentUser.firstName = action.payload.firstName
             state.currentUser.lastName = action.payload.lastName
             state.currentUser.email = action.payload.email
@@ -229,15 +194,11 @@ export const userSlice = createSlice({
         },
         [disableBuyer.fulfilled]: (state, action) => {
             console.log("Buyer diabled")
-
-
         },
 
 
         [deleteBuyer.fulfilled]: (state, action) => {
             console.log("Buyer deleted")
-
-
         },
 
 

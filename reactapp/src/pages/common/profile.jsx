@@ -3,45 +3,40 @@ import './profile.css';
 import NavigationBar from '../../components/common/NavigationBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../../features/userSlice';
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Profile() {
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
-  // const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phonenumber, setPhoneNumber] = useState('');
-  // const [address, setAddress] = useState('');
   const [editable, setEditable] = useState(false);
-  // const [type, setType] = useState('');
 
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
   const token = useSelector((state) => state.user.token);
-  const passwordValidation = new RegExp ('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{5,}$')
+  const passwordValidation = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{5,}$')
+
   useEffect(() => {
-   if (currentUser) {
+    if (currentUser) {
       setFirstName(currentUser.firstName || '');
       setLastName(currentUser.lastName || '');
-      // setEmail(currentUser.email || '');
       setPassword(currentUser.password || '');
       setPhoneNumber(currentUser.phone || '');
-      // setAddress(currentUser.address || '');
-      // setType(currentUser.type || '');
     }
   }, [currentUser]);
 
   const handleSubmit = () => {
-     const updatedUser = {
+    const updatedUser = {
       firstName: firstname,
       lastName: lastname,
       password: password,
       phone: phonenumber,
-      
+
     };
-    
+
     if (Object.keys(updatedUser).some((key) => updatedUser[key] !== currentUser[key])) {
       if (passwordValidation.test(updatedUser.password)) {
         dispatch(updateUser({ token, id: currentUser.id, updatedUser }))
@@ -55,10 +50,10 @@ export default function Profile() {
               position: toast.POSITION.TOP_CENTER,
             });
           });
-      }else{
-         toast.error('Enter a valid password!', {
-                        position: toast.POSITION.TOP_CENTER
-                    });
+      } else {
+        toast.error('Enter a valid password!', {
+          position: toast.POSITION.TOP_CENTER
+        });
       }
     } else {
       toast.info('No changes detected', {
@@ -73,7 +68,7 @@ export default function Profile() {
     setEditable(true);
   };
 
-       return (
+  return (
     <div>
       <NavigationBar />
       <br />
@@ -111,7 +106,7 @@ export default function Profile() {
           onChange={(e) => setLastName(e.target.value)}
         />
         <br />
-        
+
         <h6> Password</h6>
         <input
           className='form-control input'

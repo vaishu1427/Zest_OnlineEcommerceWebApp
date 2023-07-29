@@ -1,15 +1,15 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Col } from 'react-bootstrap';
 import Phone from '../../assets/phone.jpg';
-import {fetchProductById} from "../../features/productSlice";
-import {useDispatch, useSelector} from "react-redux";
+import { fetchProductById } from "../../features/productSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductDetail = (props) => {
     const token = useSelector(state => state.user.token)
     const dispatch = useDispatch()
-    useEffect( () => {
-        dispatch(fetchProductById({token: token, productId: props.productId}))
-    },[])
+    useEffect(() => {
+        dispatch(fetchProductById({ token: token, productId: props.productId }))
+    }, [])
     const productDetails = useSelector(state => state.product.productDetails)
     return (
         <div>
@@ -23,10 +23,9 @@ const ProductDetail = (props) => {
                             <h6> <b>{productDetails.name}</b></h6>
                             <p className="text-success fw-bold fs-5">{`₹ ${productDetails?.price?.toLocaleString("en-US")}`}</p>
                         </div>
-
                     </div>
                 </Col>
-            </div><br/>
+            </div><br />
         </div>
     );
 };

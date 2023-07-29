@@ -1,9 +1,8 @@
 package com.example.springapp.service;
 
 
-import com.example.springapp.config.user.UserRepository;
+import com.example.springapp.repo.UserRepository;
 import com.example.springapp.dto.request.ProductRequestDto;
-import com.example.springapp.dto.response.SellerDashboardResponse;
 import com.example.springapp.model.Cart;
 import com.example.springapp.model.User;
 import com.example.springapp.model.Product;
@@ -28,15 +27,14 @@ public class ProductService {
     private UserRepository userRepository;
 
     // Get
-    public List<Product> getProducts(String cat){
+    public List<Product> getProducts(String cat) {
 
         List<Product> productList = new ArrayList<>();
 
-        if (cat == null){
+        if (cat == null) {
             productRepository.findAll().forEach(product -> productList.add(product));
 
-        }
-        else{
+        } else {
             return productRepository.findAllByCategory(cat);
         }
 
@@ -63,13 +61,13 @@ public class ProductService {
     }
 
     // Get Product by Id
-    public Product getProductById(Integer productId){
+    public Product getProductById(Integer productId) {
         return productRepository.findById(productId).orElseThrow();
     }
 
     // Update Product
-    public Product updatingProduct(int productId,ProductRequestDto productRequestDto) throws IOException {
-         // Assuming there's an 'id' field in the Product class
+    public Product updatingProduct(int productId, ProductRequestDto productRequestDto) throws IOException {
+        // Assuming there's an 'id' field in the Product class
         Product existingProduct = productRepository.findById(productId).orElseThrow();
         System.out.println(productRequestDto.getQuantity());
         existingProduct.setName(productRequestDto.getName());
@@ -83,7 +81,7 @@ public class ProductService {
         return productRepository.save(existingProduct);
     }
 
-    public Product updateProductImage(int productId,ProductRequestDto productRequestDto) throws IOException {
+    public Product updateProductImage(int productId, ProductRequestDto productRequestDto) throws IOException {
         Product existingProduct = productRepository.findById(productId).orElseThrow();
         existingProduct.setImage(productRequestDto.getImage());
         return productRepository.save(existingProduct);
@@ -95,8 +93,8 @@ public class ProductService {
         product.setDeleted(true);
         productRepository.save(product);
         List<Cart> cartList = cartRepository.findAllByProduct(product);
-        for (Cart c: cartList
-             ) {
+        for (Cart c : cartList
+        ) {
             c.setDeleted(true);
             cartRepository.save(c);
         }
@@ -118,7 +116,7 @@ public class ProductService {
         return productRepository.findAllByCategoryAndIsDeletedFalse(category);
     }
 
-    
+
     public Map<String, Object> getProductDashboard(Long id) {
         List<Object[]> queryResult = productRepository.getSellerDashboard(id);
         Map<String, Object> response = mapToSellerDashboardResponse(queryResult);
@@ -145,7 +143,7 @@ public class ProductService {
 
     public List<Map<String, Object>> convertProductReviews(List<Object[]> queryResult) {
         List<Map<String, Object>> result = new ArrayList<>();
-        for (Object[] o: queryResult
+        for (Object[] o : queryResult
         ) {
             Map<String, Object> temp = new LinkedHashMap<>();
             temp.put("customer_name", o[0]);

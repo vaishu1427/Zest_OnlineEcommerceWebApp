@@ -58,12 +58,12 @@ public class QA {
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
-    private  Date updatedAt;
+    private Date updatedAt;
 
     public QA(User buyer, Product product, String question) {
-        this.buyer=buyer;
-        this.product=product;
-        this.question=question;
+        this.buyer = buyer;
+        this.product = product;
+        this.question = question;
     }
 
     public QA() {

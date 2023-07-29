@@ -5,7 +5,7 @@ import { MdAccountCircle, MdLogout, MdAddShoppingCart, MdLocationOn, MdMessage, 
 import { HiShoppingCart } from 'react-icons/hi';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import {setSearchQuery} from "../../features/productSlice";
+import { setSearchQuery } from "../../features/productSlice";
 import LogOutModal from './LogOutModal';
 
 export default function NavigationBar() {
@@ -15,7 +15,7 @@ export default function NavigationBar() {
     const target = useRef(null);
     const navigate = useNavigate();
     const dispatch = useDispatch()
-    const [search,setSearch] = useState('');
+    const [search, setSearch] = useState('');
     const currentUser = useSelector(state => state.user.currentUser)
 
     function handlePurchaseHistory() {
@@ -50,8 +50,8 @@ export default function NavigationBar() {
     }
 
     async function handleSearch() {
-        console.log("search-query",search)
-        await dispatch(setSearchQuery({searchQuery:search}));
+        console.log("search-query", search)
+        await dispatch(setSearchQuery({ searchQuery: search }));
         navigate('/search')
     }
     return (
@@ -72,9 +72,6 @@ export default function NavigationBar() {
                                     <button onClick={() => handleSearch()} class="btn btn-outline-secondary" type="button"><i className="md md-envelope mx-1"> <FaSearch style={{ justifyContent: "center", height: 20, paddingBottom: "5px" }} /></i></button>
                                 </div>
                             </div>
-
-
-
                         </div>
                         <div className="col-md-3">
                             <ul className="navbar-nav d-flex flex-row-reverse justify-content me-3">
@@ -97,10 +94,10 @@ export default function NavigationBar() {
                                     </Offcanvas>
                                 </li>
                                 <li className="nav-item me-3 me-lg-4">
-                                    <a className="nav-link text-white" href="#" onClick={() =>  navigate("/cart")}><i className="hi hi-envelope mx-1"><HiShoppingCart style={{ width: 30, height: 20 }} /></i> Cart</a>
+                                    <a className="nav-link text-white" href="#" onClick={() => navigate("/cart")}><i className="hi hi-envelope mx-1"><HiShoppingCart style={{ width: 30, height: 20 }} /></i> Cart</a>
                                 </li>
                             </ul>
-                            <LogOutModal show={showLogoutModal} handleHideRemoveModal={handleHideRemoveModal}/>
+                            <LogOutModal show={showLogoutModal} handleHideRemoveModal={handleHideRemoveModal} />
                         </div>
                     </div>
                 </div>

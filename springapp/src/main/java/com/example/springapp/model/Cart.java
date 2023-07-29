@@ -30,7 +30,7 @@ public class Cart {
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
-    private  Date updatedAt;
+    private Date updatedAt;
 
     private int quantity;
 

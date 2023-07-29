@@ -1,6 +1,5 @@
 package com.example.springapp.model;
 
-import com.example.springapp.model.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -28,7 +27,7 @@ public class Purchase {
 
     private String paymentMethod;
 
-    private  boolean isReviewed;
+    private boolean isReviewed;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean isDeleted;
@@ -36,7 +35,7 @@ public class Purchase {
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
-    private  Date updatedAt;
+    private Date updatedAt;
 
     // Constructors
 
@@ -47,7 +46,7 @@ public class Purchase {
         this.product = product;
         this.buyer = buyer;
         this.purchaseDate = purchaseDate;
-        this.paymentMethod=paymentMethod;
+        this.paymentMethod = paymentMethod;
     }
 
     // Getters and setters

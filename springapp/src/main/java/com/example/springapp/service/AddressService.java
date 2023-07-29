@@ -39,4 +39,9 @@ public class AddressService {
         temp.setState(address.getState());
         addressRepository.save(temp);
     }
+
+    public Address getAddressById(Integer addressId) {
+        Address temp = addressRepository.findById(addressId).orElseThrow();
+        return temp;
+    }
 }

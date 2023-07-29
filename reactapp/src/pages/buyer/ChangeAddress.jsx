@@ -1,33 +1,52 @@
 import { useState, useRef, useEffect } from "react";
 import NavigationBar from "../../components/common/NavigationBar";
 import AddAddressModal from "../../components/buyer/AddAddressModal";
-import {MdKeyboardBackspace} from 'react-icons/md';
+import { MdKeyboardBackspace } from 'react-icons/md';
 import { useNavigate } from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {fetchAddress} from "../../features/addressSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAddress } from "../../features/addressSlice";
 import { ReactComponent as Address } from '../../assets/Address.svg';
+import AddressDeleteModal from "../../components/buyer/AddressDeleteModal";
+import EditAddressModal from "../../components/buyer/EditAddressModal";
 
 export default function ChangeAddress() {
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const handleHideRemoveModal = () => setShowDeletePopup(false);
     const [showAddressModal, setShowAddressModal] = useState(false);
+    const [showEditAddressModal, setEditShowAddressModal] = useState(false);
+    const handleCloseEditAddressModal = () => setEditShowAddressModal(false);
     const target = useRef(null);
     const handleCloseAddressModal = () => setShowAddressModal(false);
     const navigate = useNavigate();
     const dispatch = useDispatch()
+    const [selected, setSelected] = useState(null)
     const token = useSelector(state => state.user.token)
-    useEffect(() =>{
-        dispatch(fetchAddress({token:token}))
-    },[])
+    useEffect(() => {
+        dispatch(fetchAddress({ token: token }))
+    }, [])
     const addressList = useSelector(state => state.address.addressList)
     const handleGoBack = () => {
         navigate("/home")
     };
 
+    const handleDeleteAddress = (id) => {
+        setSelected(id)
+        console.log(selected)
+        setShowDeletePopup(true)
+    }
+
+    const handleEditAddress = (id) => {
+        setSelectedAddress(id)
+        console.log(selectedAddress)
+        setEditShowAddressModal(true)
+    }
+
     return (
         <div>
-            <NavigationBar /><br /><br /><br/>
+            <NavigationBar /><br /><br /><br />
             <div className='d-flex flex-row align-items-center'>
-                <p className='ms-3' ><MdKeyboardBackspace style={{color:"grey"}} onClick={handleGoBack}/>{" "}<a href="#" style={{color:"grey"}} onClick={handleGoBack}>Back</a></p>
-                <p className='ms-3' style={{fontSize:30}}><b>CHANGE ADDRESS</b></p>
+                <p className='ms-3' ><MdKeyboardBackspace style={{ color: "grey" }} onClick={handleGoBack} />{" "}<a href="#" style={{ color: "grey" }} onClick={handleGoBack}>Back</a></p>
+                <p className='ms-3' style={{ fontSize: 30 }}><b>CHANGE ADDRESS</b></p>
                 <a ref={target} onClick={() => setShowAddressModal(!showAddressModal)} className='ms-3  text-dark ' href='#addaddress' style={{ fontSize: 15 }}>Add address</a>
             </div>
             <br />
@@ -40,25 +59,45 @@ export default function ChangeAddress() {
                         <Address />
                     </div>
                 </div>
-            ) : (            
-            <div className='container mb-5'>
-                    {addressList.map((value,index) => (
+            ) : (
+                <div className='container mb-5'>
+                    {addressList.map((value, index) => (
                         <div className="row">
                             <div className=" card border container-fluid mt-3 col-md-6 col-md-offset-3 " >
                                 <div className="card-body">
-                                    <h5 className="card-title fw-bold">Address {index+1}</h5>
-                                    <span className="card-text   mt-3">{value.flatNo}</span><br/>
-                                    <span className="card-text   ">{value.area}</span><br/>
-                                    <span className="card-text  ">{value.city}</span><br/>
-                                    <span className="card-text  ">{value.state}</span><br/>
+                                    <h5 className="card-title fw-bold">Address {index + 1}</h5>
+                                    <span className="card-text   mt-3">{value.flatNo}</span><br />
+                                    <span className="card-text   ">{value.area}</span><br />
+                                    <span className="card-text  ">{value.city}</span><br />
+                                    <span className="card-text  ">{value.state}</span><br />
                                     <div className=' mb-3  '>{value.pincode}</div>
+                                </div>
+                                <div className="d-flex flex-row-reverse">
+                                    <button
+                                        style={{ backgroundColor: '#F25151', color: 'black', margin: '0px 10px 10px 10px' }}
+                                        type="button"
+                                        className="btn"
+                                        onClick={() => handleDeleteAddress(value.id)}
+                                    >
+                                        <b>Delete</b>
+                                    </button>
+                                    <button
+                                        style={{ backgroundColor: '#F25151', color: 'black', margin: '0px 10px 10px 10px' }}
+                                        type="button"
+                                        className="btn"
+                                        onClick={() => handleEditAddress(value.id)}
+                                    >
+                                        <b>Edit</b>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     ))}
-            </div>
+                </div>
             )}
+            <AddressDeleteModal addressid={selected} show={showDeletePopup} onHide={handleHideRemoveModal} />
             <AddAddressModal show={showAddressModal} onHide={handleCloseAddressModal} />
+            <EditAddressModal addressid={selectedAddress} show={showEditAddressModal} onHide={handleCloseEditAddressModal} />
         </div>
     )
 }

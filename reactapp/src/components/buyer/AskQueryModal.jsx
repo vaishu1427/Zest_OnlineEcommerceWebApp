@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import {useDispatch, useSelector} from "react-redux";
-import {addQA} from "../../features/qaSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addQA } from "../../features/qaSlice";
 
 
 const AskQueryModal = (props) => {
@@ -9,7 +9,7 @@ const AskQueryModal = (props) => {
     const [textareaValue, setTextareaValue] = useState('');
     const token = useSelector(state => state.user.token)
     async function handleSubmit() {
-        await dispatch(addQA({token: token, productId: props.productId, question: textareaValue}))
+        await dispatch(addQA({ token: token, productId: props.productId, question: textareaValue }))
         setTextareaValue('')
         props.onHide()
     }

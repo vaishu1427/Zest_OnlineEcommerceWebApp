@@ -2,10 +2,10 @@ import { ReactComponent as Landingpageimg } from '../../assets/Ecommerce web pag
 import './LandingPage.css';
 import HeaderBar from '../../components/common/HeaderBar';
 import Footer from '../../components/common/Footer';
-import {useSelector } from 'react-redux';
-import {useNavigate} from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
-import {useEffect} from "react";
+import { useEffect } from "react";
 
 export default function LandingPage() {
 
@@ -14,7 +14,7 @@ export default function LandingPage() {
     const signinSuccess = useSelector(state => state.user.signinSuccess)
     const currentUser = useSelector(state => state.user.currentUser)
     console.log("success--landing")
-    useEffect(() =>{
+    useEffect(() => {
         if (token !== null) {
             console.log(currentUser)
             if (currentUser.roles === 'ROLE_ADMIN') {
@@ -26,25 +26,25 @@ export default function LandingPage() {
                 navigate("/home");
             }
         }
-    },[])
+    }, [])
     if (signinSuccess) {
         console.log("success-login")
         console.log(currentUser)
-        if(currentUser && currentUser.roles){
-        if (currentUser.roles === 'ROLE_ADMIN') {
-            navigate("/admin/products");
-        } else if (currentUser.roles === 'ROLE_SELLER') {
-            console.log("success-seller")
-            navigate("/seller/home");
-        } else if (currentUser.roles === 'ROLE_BUYER') {
-            navigate("/home");
+        if (currentUser && currentUser.roles) {
+            if (currentUser.roles === 'ROLE_ADMIN') {
+                navigate("/admin/products");
+            } else if (currentUser.roles === 'ROLE_SELLER') {
+                console.log("success-seller")
+                navigate("/seller/home");
+            } else if (currentUser.roles === 'ROLE_BUYER') {
+                navigate("/home");
+            }
         }
-    }
     }
 
     return (
         <div>
-            <HeaderBar/>
+            <HeaderBar />
             <div className="container-fluid">
                 <div className="row">
                     <div style={{ marginLeft: 40, marginTop: 60, marginRight: 40 }} className="col">
@@ -60,17 +60,17 @@ export default function LandingPage() {
             </div>
             <div className="container-fluid">
                 <div className="row">
-                    <div style={{ marginLeft: 40,marginTop:-50, marginRight: 40 }} className="col-6">
+                    <div style={{ marginLeft: 40, marginTop: -50, marginRight: 40 }} className="col-6">
                         <p className="h2 text-start"><b>Ultimate Shopping Bliss</b></p>
                     </div>
                 </div>
-                <br/><br/>
+                <br /><br />
             </div>
-            <div className='container'>          
+            <div className='container'>
                 <div class="row">
                     <div class="col-md-3">
                         <div class="card mb-4 landingPageCard">
-                        <img src={require('../../assets/FashionBlogging.gif')} alt="loading..." style={{height:230,weight:230}}/>
+                            <img src={require('../../assets/FashionBlogging.gif')} alt="loading..." style={{ height: 230, weight: 230 }} />
                             <div class="card-body">
                                 <h5 class="card-title"><b>Best Sellers</b></h5>
                                 <h6 class="card-text fw-lighter">Discover the most sought-after products from us - handpicked for their unbeatable quality and trendsetting designs.</h6>
@@ -79,7 +79,7 @@ export default function LandingPage() {
                     </div>
                     <div class="col-md-3">
                         <div class="card mb-4 landingPageCard">
-                        <img src={require('../../assets/FreeShipping.gif')} alt="loading..." style={{height:230,weight:230}}/>
+                            <img src={require('../../assets/FreeShipping.gif')} alt="loading..." style={{ height: 230, weight: 230 }} />
                             <div class="card-body">
                                 <h5 class="card-title"><b>Free Shipping</b></h5>
                                 <h6 class="card-text fw-lighter">Shop now and have your favorite products delivered to your doorstep without any extra cost.</h6>
@@ -88,7 +88,7 @@ export default function LandingPage() {
                     </div>
                     <div class="col-md-3">
                         <div class="card mb-4 landingPageCard">
-                        <img src={require('../../assets/FastDelivery.gif')} alt="loading..." style={{height:230,weight:230}}/>
+                            <img src={require('../../assets/FastDelivery.gif')} alt="loading..." style={{ height: 230, weight: 230 }} />
                             <div class="card-body">
                                 <h5 class="card-title"><b>Fast Delivery</b></h5>
                                 <h6 class="card-text fw-lighter">Experience lightning-fast delivery on all orders, ensuring you receive your desired products in record time. </h6>
@@ -97,7 +97,7 @@ export default function LandingPage() {
                     </div>
                     <div class="col-md-3">
                         <div class="card mb-4 landingPageCard">
-                        <img src={require('../../assets/HighFive.gif')} alt="loading..." style={{height:230,weight:230}}/>
+                            <img src={require('../../assets/HighFive.gif')} alt="loading..." style={{ height: 230, weight: 230 }} />
                             <div class="card-body">
                                 <h5 class="card-title"><b>Happy Customers</b></h5>
                                 <h6 class="card-text fw-lighter">Shop with confidence and become part of our community of delighted customers, where your happiness is our priority.</h6>
@@ -106,7 +106,7 @@ export default function LandingPage() {
                     </div>
                 </div>
             </div>
-            <br/>
+            <br />
             <Footer />
         </div>
     )

@@ -1,4 +1,4 @@
-package com.example.springapp.config.user;
+package com.example.springapp.dto.request;
 
 public class UserLoginDto {
     private String email;

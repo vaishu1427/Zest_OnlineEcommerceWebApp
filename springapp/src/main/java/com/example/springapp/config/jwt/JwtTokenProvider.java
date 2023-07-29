@@ -1,11 +1,8 @@
 package com.example.springapp.config.jwt;
 
-import com.example.springapp.config.token.Token;
-import com.example.springapp.config.token.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
@@ -14,8 +11,6 @@ import java.util.Date;
 
 public class JwtTokenProvider {
 
-    @Autowired
-    TokenRepository tokenRepository;
     public String generateToken(Authentication auth) {
         // Generate a JWT token for the given user details
         String username = auth.getName();
@@ -26,7 +21,7 @@ public class JwtTokenProvider {
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, "secret")
-                .compact();;
+                .compact();
         return token;
     }
 
@@ -48,8 +43,8 @@ public class JwtTokenProvider {
         return claims.getSubject();
     }
 
-    public String getTokenFromHeader(String token){
-        if(StringUtils.hasText(token) && token.startsWith("Bearer ")) {
+    public String getTokenFromHeader(String token) {
+        if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
             return token.substring(7);
         }
         return null;

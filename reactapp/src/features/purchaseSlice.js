@@ -1,148 +1,148 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {toast} from "react-toastify";
-import {createPurchase, getPurchaseByBuyer, getPurchaseByProduct,getPurchaseByBuyerIdd} from "../api/purchaseService";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import { createPurchase, getPurchaseByBuyer, getPurchaseByProduct, getPurchaseByBuyerIdd } from "../api/purchaseService";
 
 export const addPurchase =
-    createAsyncThunk('purchase/addPurchase',async (body)=>{
-        return  createPurchase(body.token,body
-        ).then((res) =>{
+    createAsyncThunk('purchase/addPurchase', async (body) => {
+        return createPurchase(body.token, body
+        ).then((res) => {
             return res.data
-        }).catch((err) =>{
+        }).catch((err) => {
             return err.response.data
         })
     })
 
 export const fetchPurchase =
-    createAsyncThunk('purchase/fetchPurchase',async (body)=>{
-        return  getPurchaseByBuyer(
+    createAsyncThunk('purchase/fetchPurchase', async (body) => {
+        return getPurchaseByBuyer(
             body.token
-        ).then((res) =>{
+        ).then((res) => {
             return res.data
-        }).catch((err) =>{
+        }).catch((err) => {
             return err.response.data
         })
     })
 
 export const fetchPurchaseByProduct =
-    createAsyncThunk('purchase/fetchPurchaseByProduct',async (body)=>{
-        return  getPurchaseByProduct(
+    createAsyncThunk('purchase/fetchPurchaseByProduct', async (body) => {
+        return getPurchaseByProduct(
             body.token,
             body.productId
-        ).then((res) =>{
+        ).then((res) => {
             return res.data
-        }).catch((err) =>{
+        }).catch((err) => {
             return err.response.data
         })
     })
 export const fetchPurchaseById =
-    createAsyncThunk('purchase/fetchPurchaseById',async (body)=>{
+    createAsyncThunk('purchase/fetchPurchaseById', async (body) => {
         console.log(body);
-        return  getPurchaseByBuyerIdd(
+        return getPurchaseByBuyerIdd(
             body.userid
-        ).then((res) =>{
+        ).then((res) => {
             return res.data
-        }).catch((err) =>{
+        }).catch((err) => {
             return err.response.data
         })
     })
 
 export const purchaseSlice = createSlice({
-    name:"purchase",
-    initialState:{
-        fetchPurchaseInProcess:'',
-        purchaseList:[],
-        purchaseListByProduct:[],
-        purchaseListById:[],
+    name: "purchase",
+    initialState: {
+        fetchPurchaseInProcess: '',
+        purchaseList: [],
+        purchaseListByProduct: [],
+        purchaseListById: [],
     },
-    reducers:{
-        setSelectedPurchase:(state,action) =>{
+    reducers: {
+        setSelectedPurchase: (state, action) => {
             state.selectedPurchase = action.payload.buyerId
         },
     },
-    extraReducers:{
-        [addPurchase.pending]:(state) => {
+    extraReducers: {
+        [addPurchase.pending]: (state) => {
             console.log("Purchase Add pending")
         },
-        [addPurchase.fulfilled]:(state,action) =>{
-            if(action.payload !== undefined){
-                if(action.payload.message ==="success"){
+        [addPurchase.fulfilled]: (state, action) => {
+            if (action.payload !== undefined) {
+                if (action.payload.message === "success") {
                     console.log("OrderPlaced")
-                }else {
+                } else {
                     toast.error('Please try again!!', {
                         position: toast.POSITION.TOP_CENTER
                     });
                 }
-            }else {
+            } else {
                 toast.error("Try again after sometime", {
                     position: toast.POSITION.TOP_CENTER
                 });
             }
         },
-        [addPurchase.rejected]:(state)=>{
+        [addPurchase.rejected]: (state) => {
             toast.error("Purchase Create failed", {
                 position: toast.POSITION.TOP_CENTER
             });
         },
-        [fetchPurchase.pending]:(state) => {
+        [fetchPurchase.pending]: (state) => {
             state.fetchPurchaseInProcess = true
             console.log("pending")
         },
-        [fetchPurchase.fulfilled]:(state,action) =>{
-            if(action.payload !== undefined){
-                if(action.payload.message ==="success"){
+        [fetchPurchase.fulfilled]: (state, action) => {
+            if (action.payload !== undefined) {
+                if (action.payload.message === "success") {
                     state.purchaseList = action.payload.data
                     console.log("Purchase fetched")
-                }else {
+                } else {
                     console.log(action.payload.message)
                 }
-            }else {
+            } else {
                 toast.error("Try again after sometime", {
                     position: toast.POSITION.TOP_CENTER
                 });
             }
         },
-        [fetchPurchase.rejected]:(state)=>{
+        [fetchPurchase.rejected]: (state) => {
             state.fetchPurchaseInProcess = false
             console.log("Purchase fetch failed")
         },
-        [fetchPurchaseByProduct.pending]:(state) => {
+        [fetchPurchaseByProduct.pending]: (state) => {
             state.fetchPurchaseInProcess = true
             console.log("pending")
         },
-        [fetchPurchaseByProduct.fulfilled]:(state,action) =>{
-            if(action.payload !== undefined){
-                if(action.payload.message ==="success"){
+        [fetchPurchaseByProduct.fulfilled]: (state, action) => {
+            if (action.payload !== undefined) {
+                if (action.payload.message === "success") {
                     state.purchaseListByProduct = action.payload.data
                     console.log("Purchase fetched")
-                }else {
+                } else {
                     console.log(action.payload.message)
                 }
-            }else {
+            } else {
                 toast.error("Try again after sometime", {
                     position: toast.POSITION.TOP_CENTER
                 });
             }
         },
-        [fetchPurchaseByProduct.rejected]:(state)=>{
+        [fetchPurchaseByProduct.rejected]: (state) => {
             state.fetchPurchaseInProcess = false
             console.log("Purchase fetch failed")
         },
-         [fetchPurchaseById.pending]:(state) => {
+        [fetchPurchaseById.pending]: (state) => {
             state.fetchPurchaseInProcess = true
             console.log("pending")
         },
-        [fetchPurchaseById.fulfilled]:(state,action) =>{
-            if(action.payload.message ==="success"){
+        [fetchPurchaseById.fulfilled]: (state, action) => {
+            if (action.payload.message === "success") {
                 state.purchaseListById = action.payload.data
                 console.log(state.purchaseListById)
                 console.log(action.payload)
                 console.log("Purchase fetched")
-            }else {
+            } else {
                 console.log("purchase failed")
                 console.log(action.payload.message)
             }
         },
-        [fetchPurchaseById.rejected]:(state)=>{
+        [fetchPurchaseById.rejected]: (state) => {
             state.fetchPurchaseInProcess = false
             console.log("Purchase fetch failed")
         },

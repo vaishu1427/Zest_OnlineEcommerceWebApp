@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import {baseUrl} from "../../api/config";
-import {useSelector} from "react-redux";
+import { baseUrl } from "../../api/config";
+import { useSelector } from "react-redux";
 
 
 export default function DashBoard() {
-    const [data,setData] = useState({
+    const [data, setData] = useState({
         total_revenue: 0,
         total_no_products: 0,
         sold_products: 0,
@@ -13,19 +13,23 @@ export default function DashBoard() {
         out_of_stock_products: 0,
         total_customers: 0
     })
+
     const token = useSelector(state => state.user.token)
-    useEffect(() =>{
+
+    useEffect(() => {
         getData()
-    },[])
-    function getData(){
-        axios.get(`${baseUrl}/seller/dashboard`,{
+    }, [])
+
+    function getData() {
+        axios.get(`${baseUrl}/seller/dashboard`, {
             headers: { Authorization: `Bearer ${token}` }
-        }).then((res) =>{
+        }).then((res) => {
             setData(res.data.data)
-        }).catch((err) =>{
+        }).catch((err) => {
             console.log(err)
         })
     }
+    
     return (
         <div>
             <div><h3 style={{ marginLeft: 10, marginTop: 8 }}><b>DASHBOARD</b></h3></div>
