@@ -24,6 +24,7 @@ import CheckoutPage from "./pages/buyer/CheckoutPage";
 import ProductCategoryPage from "./pages/buyer/ProductCategoryPage";
 import ProductSearchPage from "./pages/buyer/ProductSearchPage";
 import BuyerQA from "./pages/buyer/BuyerQA";
+import SellerProfile from "./pages/seller/SellerProfile"
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
         <Route path="/category" element={<RequireAuth role={'ROLE_BUYER'}><ProductCategoryPage /></RequireAuth>} />
         <Route path="/search" element={<RequireAuth role={'ROLE_BUYER'}><ProductSearchPage /></RequireAuth>} />
         <Route path="/qa" element={<RequireAuth role={'ROLE_BUYER'}><BuyerQA /></RequireAuth>} />
+        <Route path="/seller/profile" element={<SellerProfile />} />
       </Routes>
     </Router>
   );

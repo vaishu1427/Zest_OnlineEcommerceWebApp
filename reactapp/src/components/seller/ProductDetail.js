@@ -1,19 +1,28 @@
 import React, { useEffect } from 'react';
 import { Col } from 'react-bootstrap';
-import Phone from '../../assets/phone.jpg';
+import { MdKeyboardBackspace } from 'react-icons/md';
 import { fetchProductById } from "../../features/productSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const ProductDetail = (props) => {
     const token = useSelector(state => state.user.token)
+    const navigate = useNavigate();
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(fetchProductById({ token: token, productId: props.productId }))
     }, [])
     const productDetails = useSelector(state => state.product.productDetails)
+    const handleGoBack = () => {
+        navigate("/seller/home")
+    };
+
     return (
         <div>
-            <h3 style={{ marginLeft: 10, marginTop: 8 }}><b>BUYERS</b></h3>
+            <div className="d-flex flex-row align-items-center">
+                <p className='ms-3' ><MdKeyboardBackspace style={{ color: "grey" }} onClick={handleGoBack} />{" "}<a href="#" style={{ color: "grey" }} onClick={handleGoBack}>Back</a></p>
+                <p className='ms-3' style={{ fontSize: 30 }}><b>BUYERS</b></p>
+            </div>
             <br />
             <div className="container">
                 <Col className="d-flex justify-content-center">

@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../../features/userSlice';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MdKeyboardBackspace } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Profile() {
@@ -13,6 +15,7 @@ export default function Profile() {
   const [password, setPassword] = useState('');
   const [phonenumber, setPhoneNumber] = useState('');
   const [editable, setEditable] = useState(false);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -64,6 +67,10 @@ export default function Profile() {
     setEditable(false);
   };
 
+  const handleGoBack = () => {
+    navigate('/home');
+  };
+
   const handleEdit = () => {
     setEditable(true);
   };
@@ -75,9 +82,18 @@ export default function Profile() {
       <br />
       <br />
 
-      <h3 style={{ paddingLeft: '1rem' }}>
-        <b>MY PROFILE</b>
-      </h3>
+      <div className="d-flex flex-row align-items-center">
+        <p className="ms-3">
+          <MdKeyboardBackspace style={{ color: 'grey' }} onClick={handleGoBack} />
+          {' '}
+          <a href="#" style={{ color: 'grey' }} onClick={handleGoBack}>
+            Back
+          </a>
+        </p>
+        <p className="ms-3" style={{ fontSize: 30 }}>
+          <b>MY PROFILE</b>
+        </p>
+      </div>
       <br />
       <h4 style={{ paddingLeft: 100 }}>
         <b> Personal Information</b>
