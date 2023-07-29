@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
-import { TableData } from '../../components/buyer/DummyTableData';
 import AdminNavigationBar from "../../components/admin/AdminNavigationBar";
 import { ReactComponent as Empty } from '../../assets/Empty.svg';
 import ProductsRemoveModal from '../../components/admin/ProductsRemoveModal';

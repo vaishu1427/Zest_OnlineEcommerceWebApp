@@ -1,6 +1,5 @@
 package com.example.springapp;
 
-import java.util.List;
 
 public class BaseResponseDTO {
     private Object message;

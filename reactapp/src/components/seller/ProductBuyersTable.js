@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-import { ProductBuyersData } from './ProductBuyersData';
 import Table from 'react-bootstrap/Table';
 import { Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductById } from "../../features/productSlice";
 import moment from "moment";
 import { fetchPurchaseByProduct } from "../../features/purchaseSlice";
 

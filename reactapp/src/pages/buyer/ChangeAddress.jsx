@@ -36,8 +36,8 @@ export default function ChangeAddress() {
     }
 
     const handleEditAddress = (id) => {
-        setSelectedAddress(id)
-        console.log(selectedAddress)
+        setSelected(id)
+        console.log(selected)
         setEditShowAddressModal(true)
     }
 
@@ -97,7 +97,7 @@ export default function ChangeAddress() {
             )}
             <AddressDeleteModal addressid={selected} show={showDeletePopup} onHide={handleHideRemoveModal} />
             <AddAddressModal show={showAddressModal} onHide={handleCloseAddressModal} />
-            <EditAddressModal addressid={selectedAddress} show={showEditAddressModal} onHide={handleCloseEditAddressModal} />
+            <EditAddressModal addressid={selected} show={showEditAddressModal} onHide={handleCloseEditAddressModal} />
         </div>
     )
 }

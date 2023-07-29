@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { SellerData } from "../../components/seller/DummySellerData";
 import SellerNavigationBar from '../../components/seller/SellerNavigationBar';
 import Footer from '../../components/common/Footer';
 import { ToastContainer, toast } from 'react-toastify';
