@@ -18,6 +18,10 @@ export default function AdminNavigationBar() {
         setShowDropDown(!showDropDown);
     }
 
+    async function handleMyProfile(){
+        navigate("/admin/profile")
+    }
+
     return (
         <div>
             <nav className="navbar navbar-dark bg-dark">
@@ -36,7 +40,7 @@ export default function AdminNavigationBar() {
                             </Offcanvas.Header>
                             <Offcanvas.Body>
                                 <div class="list-group list-group-flush">
-                                    <a href="/profile" class="list-group-item list-group-item-action"><MdAccountCircle style={{ width: 30, height: 20 }} />My Profile</a>
+                                    <a href="#" class="list-group-item list-group-item-action"  onClick={() => handleMyProfile()}><MdAccountCircle style={{ width: 30, height: 20 }} />My Profile</a>
                                     <a href="#" class="list-group-item list-group-item-action" onClick={() => handleLogout()} ><MdLogout style={{ width: 30, height: 20 }} />Logout</a>
                                 </div>
                             </Offcanvas.Body>

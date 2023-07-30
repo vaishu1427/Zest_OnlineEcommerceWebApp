@@ -28,6 +28,7 @@ export default function Profile() {
       setLastName(currentUser.lastName || '');
       setPassword(currentUser.password || '');
       setPhoneNumber(currentUser.phone || '');
+      console.log(currentUser.password);
     }
   }, [currentUser]);
 
@@ -128,6 +129,7 @@ export default function Profile() {
           className='form-control input'
           type='password'
           name='password'
+          placeholder='Enter a new password'
           value={password}
           disabled={!editable}
           onChange={(e) => setPassword(e.target.value)}

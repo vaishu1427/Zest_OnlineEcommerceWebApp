@@ -93,7 +93,7 @@ public class UserController {
         return userService.updateUser(id, incomingUser);
     }
 
-    //delete buyer by id
+    //disable buyer by id
     @PutMapping(value = "/api/auth/user/{id}/disable")
     @CrossOrigin(origins = "http://localhost:8081/")
     public ResponseEntity<BaseResponseDTO> disableUserById(@PathVariable Long id) {

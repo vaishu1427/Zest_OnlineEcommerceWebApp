@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createUserService, loginUserService, disabledUserById, getAllUser, updateUserById, deletedUserById } from "../api/userService";
+import { createUserService, loginUserService, disabledUserById, getAllUser, updateUserById } from "../api/userService";
 import { toast } from "react-toastify";
 
 export const loginUser =
