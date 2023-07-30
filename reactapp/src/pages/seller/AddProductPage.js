@@ -120,7 +120,7 @@ export default function AddProductPage() {
                 <br></br>
                 <div className="d-flex justify-content-start" style={inputStyle.input}>
                     <div style={inputStyle.input}>
-                        <label htmlFor="categorySelect"><b>Category</b></label>
+                        <label htmlFor="categorySelect">Category</label>
                         <Dropdown>
                             <Dropdown.Toggle
                                 style={{

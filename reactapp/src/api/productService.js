@@ -41,6 +41,12 @@ export async function getProductBySellerId(token) {
     })
 }
 
+export async function getProductsBySellerId(token, userid) {
+    return await axios.get(`${baseUrl}/products/seller/${userid}`, {
+        headers: { Authorization: `Bearer ${token}` }
+    })
+}
+
 export async function getProductBySearch(token, query) {
     return await axios.get(`${baseUrl}/search?query=${query}`, {
         headers: { Authorization: `Bearer ${token}` }

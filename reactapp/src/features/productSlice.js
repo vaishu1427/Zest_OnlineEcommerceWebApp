@@ -5,6 +5,7 @@ import {
     getProduct,
     getProductById,
     getProductBySellerId,
+    getProductsBySellerId,
     getProductBySearch,
     getProductByCategory,
     updateProductById,
@@ -70,6 +71,18 @@ export const getSellerProducts =
         })
     })
 
+export const fetchProductsBySellerId =
+    createAsyncThunk('product/fetchProductsBySellerId', async (body) => {
+        return getProductsBySellerId(
+            body.token,
+            body.userid
+        ).then((res) => {
+            return res.data
+        }).catch((err) => {
+            return err.response.data
+        })
+    })
+
 export const fetchProductByQuery =
     createAsyncThunk('product/fetchProductByQuery', async (body) => {
         return getProductBySearch(
@@ -123,6 +136,7 @@ const productSlice = createSlice({
         addProductInProcess: false,
         fetchProductInProcess: false,
         fetchSellerProductInProcess: false,
+        fetchSellerProductByIdInProcess: false,
         allProductList: [],
         productListById: [],
         sellerProductsList: [],
@@ -316,6 +330,30 @@ const productSlice = createSlice({
         [updateProductImage.fulfilled]: (state, action) => {
             // Assuming the response data includes the updated product details
             state.productDetails = action.payload.data;
+        },
+        [fetchProductsBySellerId.pending]: (state) => {
+            state.fetchSellerProductByIdInProcess = true
+            console.log("pending")
+        },
+        [fetchProductsBySellerId.fulfilled]: (state, action) => {
+            state.fetchSellerProductByIdInProcess = false
+            if (action.payload !== undefined) {
+                if (action.payload.message === "success") {
+                    state.productListById = action.payload.data
+                    console.log("Product fetched")
+                    console.log(state.productListById)
+                } else {
+                    console.log(action.payload.message)
+                }
+            } else {
+                toast.error("Try again after sometime", {
+                    position: toast.POSITION.TOP_CENTER
+                });
+            }
+        },
+        [fetchProductsBySellerId.rejected]: (state) => {
+            state.fetchSellerProductByIdInProcess = false
+            console.log("Product fetch failed")
         },
     }
 })

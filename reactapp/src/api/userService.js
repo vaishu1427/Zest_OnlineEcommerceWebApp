@@ -37,13 +37,9 @@ export async function updateUserById(token, id, updatedUser) {
         headers: { Authorization: `Bearer ${token}` },
     });
 }
-export async function disabledBuyerById(token, id) {
-    return await axios.put(`${baseUrl}/auth/buyer/${id}/disable`, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
-}
-export async function deletedBuyerById(token, id) {
-    return await axios.put(`${baseUrl}/auth/buyer/${id}/delete`, {
+
+export async function disabledUserById(token, id) {
+    return await axios.put(`${baseUrl}/auth/user/${id}/disable`, {
         headers: { Authorization: `Bearer ${token}` },
     });
 }

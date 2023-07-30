@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createUserService, loginUserService, disabledBuyerById, deletedBuyerById, getAllUser, getUserById, updateUserById } from "../api/userService";
+import { createUserService, loginUserService, disabledUserById, getAllUser, updateUserById, deletedUserById } from "../api/userService";
 import { toast } from "react-toastify";
 
 export const loginUser =
@@ -25,6 +25,7 @@ export const signupUser =
                 return err.data
             })
     })
+
 export const fetchAllUsers =
     createAsyncThunk('user/fetchAllUsers', async (body) => {
         return getAllUser(
@@ -52,24 +53,26 @@ export const disableBuyer = createAsyncThunk(
     'user/disableBuyer',
     async ({ token, id }) => {
         try {
-            const response = await disabledBuyerById(token, id);
+            const response = await disabledUserById(token, id);
             return response.data;
         } catch (error) {
             throw error;
         }
     }
 );
-export const deleteBuyer = createAsyncThunk(
-    'user/deleteBuyer',
-    async ({ token, id }) => {
-        try {
-            const response = await deletedBuyerById(token, id);
-            return response.data;
-        } catch (error) {
-            throw error;
-        }
-    }
-);
+
+export const disableUser =
+    createAsyncThunk('user/deleteUser', async (body) => {
+        return disabledUserById(
+            body.token,
+            body.userId
+        ).then((res) => {
+            return res.data
+        }).catch((err) => {
+            return err.response.data
+        })
+    })
+
 export const userSlice = createSlice({
     name: "user",
     initialState: {
@@ -99,8 +102,6 @@ export const userSlice = createSlice({
         setSelectedUser: (state, action) => {
             state.selectedUser = action.payload.id
         },
-
-
     },
     extraReducers: {
         [loginUser.pending]: (state) => {
@@ -192,21 +193,31 @@ export const userSlice = createSlice({
             state.currentUser.phone = action.payload.phone
             state.userDetails = action.payload;
         },
-        [disableBuyer.fulfilled]: (state, action) => {
-            console.log("Buyer diabled")
+        [disableUser.pending]: (state) => {
+            console.log("pending")
         },
-
-
-        [deleteBuyer.fulfilled]: (state, action) => {
-            console.log("Buyer deleted")
+        [disableUser.fulfilled]: (state, action) => {
+            if (action.payload !== undefined) {
+                if (action.payload.message === "success") {
+                    console.log("User disabled")
+                } else {
+                    console.log(action.payload)
+                }
+            } else {
+                toast.error("Try again after sometime", {
+                    position: toast.POSITION.TOP_CENTER
+                });
+            }
         },
-
-
+        [disableUser.rejected]: (state) => {
+            console.log("User disabled failed")
+            alert("Try again after some time")
+        }
     }
 })
 
 
-export const { signup, disableUser, deleteUser } = userSlice.actions
+export const { signup } = userSlice.actions
 
 export const userReducer = userSlice.reducer
 

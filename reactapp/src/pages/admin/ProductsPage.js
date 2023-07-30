@@ -17,8 +17,6 @@ export default function ProductsPage() {
     };
     const handleHideRemoveModal = () => setShowRemove(false);
     console.log(showRemove);
-    const start = 0;
-    const stop = 2;
     const allProductList = useSelector(state => state.product.allProductList)
     const token = useSelector(state => state.user.token)
     const dispatch = useDispatch()
