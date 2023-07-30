@@ -23,7 +23,7 @@ public class CartService {
     }
 
     public List<Cart> getCartProducts(User user) {
-        return cartRepository.findByBuyerAndIsDeletedFalse(user);
+        return cartRepository.findByBuyerAndIsDeletedFalseAndIsEnabledTrue(user);
     }
 
     public void deleteCartProduct(Integer cartId) {

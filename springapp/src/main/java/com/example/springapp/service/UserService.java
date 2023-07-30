@@ -1,7 +1,12 @@
 package com.example.springapp.service;
 
 import com.example.springapp.config.jwt.JwtTokenProvider;
+import com.example.springapp.exception.ProductNotFoundException;
+import com.example.springapp.model.Cart;
+import com.example.springapp.model.Product;
 import com.example.springapp.model.User;
+import com.example.springapp.repo.CartRepository;
+import com.example.springapp.repo.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,17 +20,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.springapp.repo.UserRepository;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.List;
 
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
+import javax.transaction.Transactional;
+
 
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    CartRepository cartRepository;
+
+    @Autowired
+    ProductRepository productRepository;
     @Lazy
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -41,12 +55,40 @@ public class UserService implements UserDetailsService {
         return new BCryptPasswordEncoder().matches(password, user.getPassword());
     }
 
-    public boolean checkUserNameExists(String email) {
+    public boolean checkUserNameExists(String email){
         return userRepository.findByEmail(email).isPresent();
     }
 
-    public boolean checkUserNameExistsForSignup(String email) {
+    public boolean checkUserNameExistsForSignup(String email){
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    public boolean checkUserNameEnabledForSignin(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (user.isEnabled()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public boolean checkUserNameEnabledForSignup(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (user.isEnabled()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     public String generateToken(String email, String password) {
@@ -108,56 +150,41 @@ public class UserService implements UserDetailsService {
         }
     }
 
-
-    //Admin authorizations
     //disable buyer
-    public User disableBuyer(Long id) {
+    @Transactional
+    public User disableUserById(Long id) {
         Optional<User> optionalBuyer = userRepository.findById(id);
         if (optionalBuyer.isPresent()) {
             User existingUser = optionalBuyer.get();
-            existingUser.setDisabled(true);
+            existingUser.setEnabled(!existingUser.isEnabled());
+            System.out.println(existingUser.getRoles()+" "+id);
+            if("ROLE_SELLER".equals(existingUser.getRoles())){
+                System.out.println(existingUser.getRoles()+"2");
+                try {
+                    List<Product> productList = productRepository.findAllBySeller(existingUser);
+                    System.out.println("ProductList");
+                    for (Product p : productList) {
+                        List<Cart> cartProducts = cartRepository.findAllByProduct(p);
+                        for (int i = 0; i < cartProducts.size(); i++) {
+                            Cart c = cartProducts.get(i);
+                            c.setEnabled(!c.isEnabled());
+                            cartRepository.save(c);
+                        }
+                        p.setEnabled(!p.isEnabled());
+                        System.out.println(p.getId());
+                        productRepository.save((p));
+                    }
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    throw e;
+                }
+            }
             return userRepository.save(existingUser);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Buyer not found");
         }
     }
-
-    //delete buyer
-    public User deleteBuyer(Long id) {
-        Optional<User> optionalBuyer = userRepository.findById(id);
-        if (optionalBuyer.isPresent()) {
-            User existingUser = optionalBuyer.get();
-            existingUser.setDeleted(true);
-            return userRepository.save(existingUser);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Buyer not found");
-        }
-    }
-
-    //disable seller
-    public User disableSeller(Long id) {
-        Optional<User> optionalSeller = userRepository.findById(id);
-        if (optionalSeller.isPresent()) {
-            User existingUser = optionalSeller.get();
-            existingUser.setDisabled(true);
-            return userRepository.save(existingUser);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Seller not found");
-        }
-    }
-
-    //delete seller
-    public User deleteSeller(Long id) {
-        Optional<User> optionalSeller = userRepository.findById(id);
-        if (optionalSeller.isPresent()) {
-            User existingUser = optionalSeller.get();
-            existingUser.setDeleted(true);
-            return userRepository.save(existingUser);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Seller not found");
-        }
-    }
-
 }
 
 

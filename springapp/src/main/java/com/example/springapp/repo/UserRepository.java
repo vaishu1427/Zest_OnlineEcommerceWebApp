@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = "SELECT * FROM user U  WHERE U.id=:id", nativeQuery = true)
     List<User> findByUserid(Integer id);
 
-    @Query(value = "SELECT * FROM user", nativeQuery = true)
+    @Query(value = "SELECT * FROM user ", nativeQuery = true)
     List<User> findUser();
 
 

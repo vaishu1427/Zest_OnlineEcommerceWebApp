@@ -44,7 +44,13 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:8081/")
     public BaseResponseDTO createUser(@RequestBody User newUser) {
         if (userService.checkUserNameExistsForSignup(newUser.getEmail())) {
-            return new BaseResponseDTO("Already have an account");
+            if (userService.checkUserNameEnabledForSignup(newUser.getEmail())) {
+                System.out.println("Already have an account");
+                return new BaseResponseDTO("Already have an account");
+            } else {
+                System.out.println("Account disabled ! Create another one");
+                return new BaseResponseDTO("Account disabled ! Create another one");
+            }
         } else {
             if (userService.createUser(newUser)) {
                 return new BaseResponseDTO("success");
@@ -58,19 +64,26 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:8081/")
     public BaseResponseDTO loginUser(@RequestBody UserLoginDto loginDetails) {
         if (userService.checkUserNameExists(loginDetails.getEmail())) {
-            if (userService.verifyUser(loginDetails.getEmail(), loginDetails.getPassword())) {
-                Map<Object, Object> data = new HashMap<>();
-                String token = userService.generateToken(loginDetails.getEmail(), loginDetails.getPassword());
-                data.put("token", token);
-                User currentUser = userService.loadUserByUsername(loginDetails.getEmail());
-                data.put("currentUser", currentUser);
-                return new BaseResponseDTO("success", data);
+            if (userService.checkUserNameEnabledForSignin(loginDetails.getEmail())) {
+                if (userService.verifyUser(loginDetails.getEmail(), loginDetails.getPassword())) {
+                    Map<Object, Object> data = new HashMap<>();
+                    String token = userService.generateToken(loginDetails.getEmail(), loginDetails.getPassword());
+                    data.put("token", token);
+                    User currentUser = userService.loadUserByUsername(loginDetails.getEmail());
+                    data.put("currentUser", currentUser);
+                    return new BaseResponseDTO("success", data);
+                } else {
+                    return new BaseResponseDTO("password invalid");
+                }
+
             } else {
-                return new BaseResponseDTO("password invalid");
+                System.out.println("Account disabled ! Create another one");
+                return new BaseResponseDTO("Account disabled ! Create another one");
             }
         } else {
             return new BaseResponseDTO("Account not exist");
         }
+
     }
 
     //Update user details
@@ -80,19 +93,15 @@ public class UserController {
         return userService.updateUser(id, incomingUser);
     }
 
-    //Admin authorizations
-    // disable buyer by id
-    @PutMapping(value = "/api/auth/buyer/{id}/disable")
-    @CrossOrigin(origins = "http://localhost:8081/")
-    public User disableBuyer(@PathVariable Long id) {
-        return userService.disableBuyer(id);
-    }
-
-
     //delete buyer by id
-    @PutMapping(value = "/api/auth/buyer/{id}/delete")
+    @PutMapping(value = "/api/auth/user/{id}/disable")
     @CrossOrigin(origins = "http://localhost:8081/")
-    public User deleteBuyer(@PathVariable Long id) {
-        return userService.deleteBuyer(id);
+    public ResponseEntity<BaseResponseDTO> disableUserById(@PathVariable Long id) {
+        try {
+            userService.disableUserById(id);
+            return ResponseEntity.ok(new BaseResponseDTO("success"));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new BaseResponseDTO("failed"));
+        }
     }
 }

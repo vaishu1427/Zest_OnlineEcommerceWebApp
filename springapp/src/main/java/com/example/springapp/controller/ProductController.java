@@ -68,6 +68,17 @@ public class ProductController {
         }
     }
 
+    @GetMapping(value = "/api/products/seller/{id}")
+    public ResponseEntity<BaseResponseDTO> getProductsBySellerIdd(@PathVariable("id") Integer id){
+        try{
+            User user = userRepository.findByUseridd(id);
+            List<Product> sellerProductList = productService.getProductBySeller(user);
+            return ResponseEntity.ok(new BaseResponseDTO("success",sellerProductList));
+        }catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new BaseResponseDTO("failed"));
+        }
+    }
+
     @GetMapping("/api/seller/dashboard")
     public ResponseEntity<BaseResponseDTO> getProductDashboard(@RequestHeader(value = "Authorization", defaultValue = "") String token) {
         User user = userRepository.findByEmail(tokenProvider.getUsernameFromToken(tokenProvider.getTokenFromHeader(token))).orElseThrow();

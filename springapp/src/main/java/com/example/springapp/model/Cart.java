@@ -27,6 +27,8 @@ public class Cart {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean isDeleted;
 
+    private boolean isEnabled = true;
+
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
@@ -97,5 +99,13 @@ public class Cart {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 }

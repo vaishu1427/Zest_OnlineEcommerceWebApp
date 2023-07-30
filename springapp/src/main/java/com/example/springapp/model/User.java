@@ -37,16 +37,6 @@ public class User implements UserDetails {
     @UpdateTimestamp
     private  Date updatedAt;
 
-    private boolean disabled;
-   
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
-
 
     public void setRoles(String roles) {
         this.roles = roles;

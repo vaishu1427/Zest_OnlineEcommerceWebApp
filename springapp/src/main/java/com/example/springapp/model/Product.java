@@ -49,6 +49,8 @@ public class Product {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean isDeleted;
 
+    private boolean isEnabled = true;
+
     @CreationTimestamp
     private Date createdAt;
 
@@ -76,6 +78,14 @@ public class Product {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 
     public String getName() {

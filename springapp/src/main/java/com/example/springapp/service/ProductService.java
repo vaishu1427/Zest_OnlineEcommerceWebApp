@@ -109,7 +109,7 @@ public class ProductService {
     }
 
     public List<Product> getAllProducts() {
-        return productRepository.findAllByIsDeletedFalse();
+        return productRepository.findAllByIsDeletedFalseAndIsEnabledTrue();
     }
 
     public List<Product> getProductByCategory(String category) {

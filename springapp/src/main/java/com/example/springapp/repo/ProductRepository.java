@@ -42,4 +42,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByNameContainingIgnoreCaseAndIsDeletedFalse(String query);
 
     List<Product> findAllByCategoryAndIsDeletedFalse(String category);
+
+    List<Product> findAllByIsDeletedFalseAndIsEnabledTrue();
+
+    List<Product> findAllBySeller(User seller);
 }
