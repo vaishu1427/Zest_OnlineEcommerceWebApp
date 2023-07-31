@@ -21,13 +21,15 @@ public class User implements UserDetails {
     private Long id;
     private String firstName;
     private String lastName;
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String phone;
     private String roles;
-    private boolean isEnabled=true;
+
+    private String gender;
+    private boolean isEnabled = true;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean isDeleted;
@@ -35,8 +37,15 @@ public class User implements UserDetails {
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
-    private  Date updatedAt;
+    private Date updatedAt;
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public void setRoles(String roles) {
         this.roles = roles;
