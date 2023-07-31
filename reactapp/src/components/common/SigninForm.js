@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
 import { BsInfoCircle } from 'react-icons/bs';
+import ForgotPasswordModal from './ForgotPasswordModal';
 
 export default function SigninForm(props) {
 
@@ -15,6 +16,14 @@ export default function SigninForm(props) {
     const passwordValidation = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{5,}$')
     const tooltipRef = useRef(null);
     const signinInProgress = useSelector(state => state.user.signinInProgress)
+    const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+
+    const handleForgotPasswordModal = () => {
+        setShowForgotPasswordModal(true);
+        props.onHide();
+    }
+
+    const handleHideRemoveModal = () => setShowForgotPasswordModal(false);
 
     const loadingOverlayStyle = {
         top: 0,
@@ -58,53 +67,59 @@ export default function SigninForm(props) {
     }
 
     return (
-        <Offcanvas placement={'end'} show={props.show} onHide={() => props.onHide()} >
-            <Offcanvas.Header closeButton>
-                <Offcanvas.Title><b>Signin</b></Offcanvas.Title>
-            </Offcanvas.Header>
-            <Offcanvas.Body>
-                {signinInProgress ?
-                    <div style={loadingOverlayStyle}>
-                        <Spinner className={"mb-2"} animation="border" role="status">
-                        </Spinner>
-                        <span className="text-dark">Loading...</span>
-                    </div>
-                    :
-                    <div class="container">
-
-                        <div class="mb-3">
-                            <p style={{ textAlign: "left" }}> Email</p>
-                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" onChange={(e) => { setInputValue({ ...inputValue, email: e.target.value }) }} />
+        <div>
+            <Offcanvas placement={'end'} show={props.show} onHide={() => props.onHide()} >
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title><b>Signin</b></Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    {signinInProgress ?
+                        <div style={loadingOverlayStyle}>
+                            <Spinner className={"mb-2"} animation="border" role="status">
+                            </Spinner>
+                            <span className="text-dark">Loading...</span>
                         </div>
-                        <div class="mb-3">
-                            <p style={{ textAlign: "left" }}> Password</p>
-                            <div className="input-group">
-                                <input type="password" class="form-control" id="exampleFormControlInput1" placeholder="Password" onChange={(e) => { setInputValue({ ...inputValue, password: e.target.value }) }} />
-                                <OverlayTrigger
-                                    placement="top"
-                                    overlay={<Tooltip id="tooltip">Your password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 5 characters long.</Tooltip>}
-                                    trigger="click"
-                                    rootClose
-                                    ref={tooltipRef}
-                                >
-                                    <span className="input-group-text" style={{ cursor: 'pointer' }}>
-                                        <BsInfoCircle />
-                                    </span>
-                                </OverlayTrigger>
+                        :
+                        <div class="container">
+
+                            <div class="mb-3">
+                                <p style={{ textAlign: "left" }}> Email<span style={{ color: "red" }}>*</span></p>
+                                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" onChange={(e) => { setInputValue({ ...inputValue, email: e.target.value }) }} />
+                            </div>
+                            <div class="mb-3">
+                                <p style={{ textAlign: "left" }}> Password<span style={{ color: "red" }}>*</span></p>
+                                <div className="input-group">
+                                    <input type="password" class="form-control" id="exampleFormControlInput1" placeholder="Password" onChange={(e) => { setInputValue({ ...inputValue, password: e.target.value }) }} />
+                                    <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip id="tooltip">Your password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 5 characters long.</Tooltip>}
+                                        trigger="click"
+                                        rootClose
+                                        ref={tooltipRef}
+                                    >
+                                        <span className="input-group-text" style={{ cursor: 'pointer' }}>
+                                            <BsInfoCircle />
+                                        </span>
+                                    </OverlayTrigger>
+                                </div>
+                            </div>
+
+                            <br></br>
+                            <div className="d-flex justify-content-center">
+                                <button style={{ backgroundColor: "#F25151", color: "black", marginTop: 5 }} type="button" class="btn" onClick={() => handleSignin()}><b>Submit</b></button>
+                                <ToastContainer />
+                            </div>
+                            <div className="d-flex justify-content-center">
+                                <p style={{ marginTop: 10 }}><a onClick={handleForgotPasswordModal} style={{ cursor: 'pointer' }} class="text-reset text-decoration-underline"><b>Forgot your password?</b></a></p>
+                            </div>
+                            <div className="d-flex justify-content-center">
+                                <p>Didn't have an account? <a onClick={() => { props.onHide(); props.openSignup() }} style={{ cursor: 'pointer' }} class="text-reset text-decoration-underline"><b>Signup</b></a></p>
                             </div>
                         </div>
-
-                        <br></br>
-                        <div className="d-flex justify-content-center">
-                            <button style={{ backgroundColor: "#F25151", color: "black", marginTop: 5 }} type="button" class="btn" onClick={() => handleSignin()}><b>Submit</b></button>
-                            <ToastContainer />
-                        </div>
-                        <div className="d-flex justify-content-center">
-                            <p style={{ marginTop: 15 }}>Didn't have an account? <a onClick={() => { props.onHide(); props.openSignup() }} style={{ cursor: 'pointer' }} class="text-reset text-decoration-underline"><b>Signup</b></a></p>
-                        </div>
-                    </div>
-                }
-            </Offcanvas.Body>
-        </Offcanvas>
+                    }
+                </Offcanvas.Body>
+            </Offcanvas>
+            <ForgotPasswordModal show={showForgotPasswordModal} onHide={handleHideRemoveModal} />
+        </div>
     )
 }

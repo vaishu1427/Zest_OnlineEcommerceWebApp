@@ -124,6 +124,7 @@ export default function AdminProfile() {
           className='form-control input'
           type='password'
           name='password'
+          placeholder='Enter a new password'
           value={password}
           disabled={!editable}
           onChange={(e) => setPassword(e.target.value)}

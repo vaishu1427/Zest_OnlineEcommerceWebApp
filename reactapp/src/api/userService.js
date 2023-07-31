@@ -2,7 +2,7 @@ import { baseUrl } from "./config";
 import axios from "axios";
 
 
-export async function createUserService(firstName, lastName, email, password, phone, roles) {
+export async function createUserService(firstName, lastName, email, password, phone, roles, gender) {
     console.log(email)
     return await axios.post(`${baseUrl}/auth/register`, {
         "firstName": firstName,
@@ -10,7 +10,8 @@ export async function createUserService(firstName, lastName, email, password, ph
         "email": email,
         "password": password,
         "phone": phone,
-        "roles": roles
+        "roles": roles,
+        "gender": gender
     })
 }
 
@@ -44,4 +45,15 @@ export async function disabledUserById(token, id) {
     });
 }
 
+export async function sendVerificationSecurityCodeForFP(email) {
+    return await axios.post(`${baseUrl}/auth/forgot-password/send-verification-email?email=${email}`,)
+}
+
+export async function verifySecurityCodeForFP(email, securityCode) {
+    return await axios.post(`${baseUrl}/auth/verify-security-code?email=${email}&otp=${securityCode}`,)
+}
+
+export async function updatePasswordForFP(password, email) {
+    return await axios.put(`${baseUrl}/auth/forgot-password?email=${email}&password=${password}`)
+}
 

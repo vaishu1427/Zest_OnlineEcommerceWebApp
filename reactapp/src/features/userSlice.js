@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createUserService, loginUserService, disabledUserById, getAllUser, updateUserById } from "../api/userService";
+import { createUserService, loginUserService, disabledUserById, getAllUser, updateUserById, sendVerificationSecurityCodeForFP, verifySecurityCodeForFP, updatePasswordForFP } from "../api/userService";
 import { toast } from "react-toastify";
 
 export const loginUser =
@@ -16,7 +16,7 @@ export const loginUser =
 
 export const signupUser =
     createAsyncThunk('user/signupUser', async (body) => {
-        return createUserService(body.firstName, body.lastName, body.email, body.password, body.phone, body.roles)
+        return createUserService(body.firstName, body.lastName, body.email, body.password, body.phone, body.roles, body.gender)
             .then((res) => {
                 console.log(res.data)
                 return res.data
@@ -33,7 +33,7 @@ export const fetchAllUsers =
         ).then((res) => {
             return res.data
         }).catch((err) => {
-            return err.response.data
+            return err.data
         })
     })
 
@@ -69,8 +69,47 @@ export const disableUser =
         ).then((res) => {
             return res.data
         }).catch((err) => {
-            return err.response.data
+            return err.data
         })
+    })
+
+export const sendVerificationCodeForFP =
+    createAsyncThunk('user/sendVerificationCodeForFP', async (body) => {
+        return sendVerificationSecurityCodeForFP(
+            body.email
+        ).then((res) => {
+            console.log(res)
+            return res.data
+        }).catch((error) => {
+            console.log(error)
+            return error.data
+        })
+    })
+
+export const verifySecurityCode =
+    createAsyncThunk('user/verifySecurityCode', async (body) => {
+        return verifySecurityCodeForFP(
+            body.email,
+            body.securityCode
+        ).then((res) => {
+            console.log(res)
+            return res.data
+        }).catch((error) => {
+            console.log(error)
+            return error.data
+        })
+    })
+
+export const updatePassword =
+    createAsyncThunk('user/updatePassword', async ({ password, email }) => {
+        try {
+            const response = await updatePasswordForFP(password, email);
+            console.log(response);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return error.data;
+        }
     })
 
 export const userSlice = createSlice({
@@ -90,6 +129,8 @@ export const userSlice = createSlice({
         signinSuccess: false,
         signupSuccess: false,
         fetchUserInProcess: false,
+        verifyingSecuritycode: false,
+        forgotPasswordInProgress: false,
         allUserList: [],
         allActionList: [],
         selectedUser: ''
@@ -212,7 +253,117 @@ export const userSlice = createSlice({
         [disableUser.rejected]: (state) => {
             console.log("User disabled failed")
             alert("Try again after some time")
+        },
+        [sendVerificationCodeForFP.pending]: (state) => {
+            state.forgotPasswordInProgress = true
+            console.log("pending")
+        },
+        [sendVerificationCodeForFP.fulfilled]: (state, action) => {
+            state.forgotPasswordInProgress = false
+            if (action.payload !== undefined) {
+                if (action.payload.message === "success") {
+                    toast.success('Verification code sent', {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                } else {
+                    console.log(action.payload.message)
+                    toast.error(action.payload.message, {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                }
+            }
+            else {
+                toast.error("Try again after sometime", {
+                    position: toast.POSITION.TOP_CENTER
+                });
+            }
+        },
+        [sendVerificationCodeForFP.rejected]: (state) => {
+            state.forgotPasswordInProgress = false
+
+            toast.error('Please try again', {
+                position: toast.POSITION.TOP_RIGHT
+            });
+
+        },
+        [verifySecurityCode.pending]: (state) => {
+            state.verifyingSecuritycode = true;
+            console.log("pending")
+        },
+        [verifySecurityCode.fulfilled]: (state, action) => {
+            console.log("Fulfilled")
+            if (action.payload !== undefined) {
+                console.log("Fulfilled 1")
+                console.log(action.payload.message)
+                console.log(action.payload.message)
+                state.verifyingSecuritycode = false;
+                if (action.payload.message === "success") {
+                    state.verifyingSecuritycode = true;
+                    console.log(state.verifyingSecuritycode);
+                    console.log("Fulfilled 2")
+                    console.log(action.payload.message)
+                    toast.success("Code verified successfully", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+
+                } else {
+                    console.log(action.payload.message)
+                    toast.error(action.payload.message, {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                }
+            }
+            else {
+                state.verifyingSecuritycode = false;
+                toast.error("Try again after sometime", {
+                    position: toast.POSITION.TOP_CENTER
+                });
+            }
+        },
+        [verifySecurityCode.rejected]: (state) => {
+            state.signupInProgress = false
+            state.forgotPasswordInProgress = false
+            console.log("Rejected")
+            toast.error("Try again after sometime", {
+                position: toast.POSITION.TOP_CENTER
+            });
+        },
+        [updatePassword.pending]: (state) => {
+            console.log("pending")
+        },
+        [updatePassword.fulfilled]: (state, action) => {
+            console.log("Fulfilled")
+            if (action.payload !== undefined) {
+                console.log("Fulfilled 1")
+                console.log(action.payload.message)
+                console.log(action.payload.message)
+                if (action.payload.message === "success") {
+                    console.log("Fulfilled 2")
+                    console.log(action.payload.message)
+                    toast.success("Password updated successfully", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+
+                } else {
+                    console.log(action.payload.message)
+                    toast.error(action.payload.message, {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                }
+            }
+            else {
+                toast.error("Try again after sometime", {
+                    position: toast.POSITION.TOP_CENTER
+                });
+            }
+        },
+        [updatePassword.rejected]: (state) => {
+            console.log("Rejected")
+            toast.error("Try again after sometime", {
+                position: toast.POSITION.TOP_CENTER
+            });
         }
+
     }
 })
 
