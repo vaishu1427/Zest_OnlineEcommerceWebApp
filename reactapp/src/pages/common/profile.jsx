@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdKeyboardBackspace } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-
+import Footer from '../../components/common/Footer';
 
 export default function Profile() {
   const [firstname, setFirstName] = useState('');
@@ -184,6 +184,7 @@ export default function Profile() {
         </h6>
         <br />
       </div>
+      <Footer/>
     </div>
   );
 }
