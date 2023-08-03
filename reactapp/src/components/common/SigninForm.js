@@ -12,7 +12,7 @@ export default function SigninForm(props) {
 
     const [inputValue, setInputValue] = useState({ email: '', password: '' });
     const dispatch = useDispatch()
-    const emailValidation = new RegExp('\\w@gmail.com')
+    const emailValidation = new RegExp('^[a-z0-9._]+@gmail\.com$')
     const passwordValidation = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{5,}$')
     const tooltipRef = useRef(null);
     const signinInProgress = useSelector(state => state.user.signinInProgress)
@@ -83,11 +83,11 @@ export default function SigninForm(props) {
                         <div class="container">
 
                             <div class="mb-3">
-                                <p style={{ textAlign: "left" }}> Email<span style={{ color: "red" }}>*</span></p>
+                                <p style={{ textAlign: "left", fontWeight: 600 }}> Email<span style={{ color: "red" }}>*</span></p>
                                 <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" onChange={(e) => { setInputValue({ ...inputValue, email: e.target.value }) }} />
                             </div>
                             <div class="mb-3">
-                                <p style={{ textAlign: "left" }}> Password<span style={{ color: "red" }}>*</span></p>
+                                <p style={{ textAlign: "left", fontWeight: 600 }}> Password<span style={{ color: "red" }}>*</span></p>
                                 <div className="input-group">
                                     <input type="password" class="form-control" id="exampleFormControlInput1" placeholder="Password" onChange={(e) => { setInputValue({ ...inputValue, password: e.target.value }) }} />
                                     <OverlayTrigger
@@ -102,6 +102,7 @@ export default function SigninForm(props) {
                                         </span>
                                     </OverlayTrigger>
                                 </div>
+                                <p style={{ marginTop: 3, fontSize: 13 }}><a onClick={handleForgotPasswordModal} style={{ cursor: 'pointer' }} class="text-reset text-decoration-underline"><b>Forgot your password?</b></a></p>
                             </div>
 
                             <br></br>
@@ -110,10 +111,7 @@ export default function SigninForm(props) {
                                 <ToastContainer />
                             </div>
                             <div className="d-flex justify-content-center">
-                                <p style={{ marginTop: 10 }}><a onClick={handleForgotPasswordModal} style={{ cursor: 'pointer' }} class="text-reset text-decoration-underline"><b>Forgot your password?</b></a></p>
-                            </div>
-                            <div className="d-flex justify-content-center">
-                                <p>Didn't have an account? <a onClick={() => { props.onHide(); props.openSignup() }} style={{ cursor: 'pointer' }} class="text-reset text-decoration-underline"><b>Signup</b></a></p>
+                                <p style={{ marginTop: 10 }}>Didn't have an account? <a onClick={() => { props.onHide(); props.openSignup() }} style={{ cursor: 'pointer' }} class="text-reset text-decoration-underline"><b>Signup</b></a></p>
                             </div>
                         </div>
                     }

@@ -102,19 +102,19 @@ export default function SignupForm(props) {
                     </div> :
                     <div class="container">
                         <div class="mb-3">
-                            <p style={{ textAlign: "left" }}>First Name<span style={{ color: "red" }}>*</span></p>
+                            <p style={{ textAlign: "left", fontWeight:600 }}>First Name<span style={{ color: "red" }}>*</span></p>
                             <input type="name" class="form-control" id="exampleFormControlInput1" placeholder="Senoritta" value={inputValue.firstName} onChange={(e) => { setInputValue({ ...inputValue, firstName: e.target.value }) }} />
                         </div>
                         <div class="mb-3">
-                            <p style={{ textAlign: "left" }}>Last Name<span style={{ color: "red" }}>*</span></p>
+                            <p style={{ textAlign: "left", fontWeight:600 }}>Last Name<span style={{ color: "red" }}>*</span></p>
                             <input type="name" class="form-control" id="exampleFormControlInput1" placeholder="Smith" value={inputValue.lastName} onChange={(e) => { setInputValue({ ...inputValue, lastName: e.target.value }) }} />
                         </div>
                         <div class="mb-3">
-                            <p style={{ textAlign: "left" }}> Email<span style={{ color: "red" }}>*</span></p>
+                            <p style={{ textAlign: "left", fontWeight:600 }}> Email<span style={{ color: "red" }}>*</span></p>
                             <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" value={inputValue.email} onChange={(e) => { setInputValue({ ...inputValue, email: e.target.value }) }} />
                         </div>
                         <div class="mb-3">
-                            <p style={{ textAlign: "left" }}> Password<span style={{ color: "red" }}>*</span></p>
+                            <p style={{ textAlign: "left", fontWeight:600 }}> Password<span style={{ color: "red" }}>*</span></p>
                             <div className="input-group">
                                 <input type="password" class="form-control" id="exampleFormControlInput1" placeholder="Password" value={inputValue.password} onChange={(e) => { setInputValue({ ...inputValue, password: e.target.value }) }} />
                                 <OverlayTrigger
@@ -131,11 +131,11 @@ export default function SignupForm(props) {
                             </div>
                         </div>
                         <div class="mb-3">
-                            <p style={{ textAlign: "left" }}> Phone<span style={{ color: "red" }}>*</span></p>
+                            <p style={{ textAlign: "left", fontWeight:600 }}> Phone<span style={{ color: "red" }}>*</span></p>
                             <input type="phone" class="form-control" id="exampleFormControlInput1" placeholder="+91 987878999" value={inputValue.phone} onChange={(e) => { setInputValue({ ...inputValue, phone: e.target.value }) }} />
                         </div>
-                        <div style={{ marginTop: 8 }}>
-                            <p style={{ textAlign: "left" }} >Gender<span style={{ color: "red" }}>*</span></p>
+                        <div class="mb-3">
+                            <p style={{ textAlign: "left", fontWeight:600 }} >Gender<span style={{ color: "red" }}>*</span></p>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="gender" id="flexRadioDefault3" checked={inputValue.gender === "Female"} onChange={() => { setInputValue({ ...inputValue, gender: "Female" }) }} />
                                 <label class="form-check-label" htmlFor="flexRadioDefault3">
@@ -149,8 +149,8 @@ export default function SignupForm(props) {
                                 </label>
                             </div>
                         </div>
-                        <div style={{ marginTop: 8 }}>
-                            <p style={{ textAlign: "left" }} >Type<span style={{ color: "red" }}>*</span></p>
+                        <div class="mb-3">
+                            <p style={{ textAlign: "left", fontWeight:600 }} >Type<span style={{ color: "red" }}>*</span></p>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="role" id="flexRadioDefault1" checked={inputValue.roles === "ROLE_SELLER"} onChange={() => { setInputValue({ ...inputValue, roles: "ROLE_SELLER" }) }} />
                                 <label class="form-check-label" htmlFor="flexRadioDefault1">

@@ -1,12 +1,12 @@
-import {combineReducers,configureStore} from "@reduxjs/toolkit";
-import {userReducer} from './features/userSlice';
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { userReducer } from './features/userSlice';
 import { productReducer } from "./features/productSlice";
-import {persistReducer, persistStore} from "redux-persist";
+import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import {cartReducer} from "./features/cartSlice";
+import { cartReducer } from "./features/cartSlice";
 import { addressReducer } from "./features/addressSlice";
-import {qaReducer} from "./features/qaSlice";
-import {purchaseReducer} from "./features/purchaseSlice";
+import { qaReducer } from "./features/qaSlice";
+import { purchaseReducer } from "./features/purchaseSlice";
 
 const persistConfig = {
     key: "root",
@@ -15,12 +15,12 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-    user:userReducer,
-    product:productReducer,
-    cart:cartReducer,
-    address:addressReducer,
-    qa:qaReducer,
-    purchase:purchaseReducer
+    user: userReducer,
+    product: productReducer,
+    cart: cartReducer,
+    address: addressReducer,
+    qa: qaReducer,
+    purchase: purchaseReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, (state, action) => {

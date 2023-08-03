@@ -92,10 +92,10 @@ export const verifySecurityCode =
             body.email,
             body.securityCode
         ).then((res) => {
-            console.log(res)
+            console.log(res.data)
             return res.data
         }).catch((error) => {
-            console.log(error)
+            console.log(error.data)
             return error.data
         })
     })
@@ -130,7 +130,11 @@ export const userSlice = createSlice({
         signupSuccess: false,
         fetchUserInProcess: false,
         verifyingSecuritycode: false,
-        forgotPasswordInProgress: false,
+        sendVerificationInProgress: false,
+        sendVerificationLoading: false,
+        verifySecuritycodeLoading: false,
+        updatePasswordLoading: false,
+        passwordResetInProgress: false,
         allUserList: [],
         allActionList: [],
         selectedUser: ''
@@ -138,11 +142,19 @@ export const userSlice = createSlice({
     reducers: {
         signup: (state, actions) => {
             console.log(actions.payload)
-
         },
         setSelectedUser: (state, action) => {
             state.selectedUser = action.payload.id
         },
+        resetIsSendVerification: (state) => {
+            state.sendVerificationInProgress = false;
+        },
+        resetIsSecurityCodeVerified: (state) => {
+            state.verifyingSecuritycode = false
+        },
+        resetresetIsPasswordReset: (state) => {
+            state.passwordResetInProgress = false
+        }
     },
     extraReducers: {
         [loginUser.pending]: (state) => {
@@ -255,13 +267,17 @@ export const userSlice = createSlice({
             alert("Try again after some time")
         },
         [sendVerificationCodeForFP.pending]: (state) => {
-            state.forgotPasswordInProgress = true
+            state.sendVerificationLoading = true
+            state.sendVerificationInProgress = true
             console.log("pending")
         },
         [sendVerificationCodeForFP.fulfilled]: (state, action) => {
-            state.forgotPasswordInProgress = false
+            state.sendVerificationInProgress = false
+            state.sendVerificationLoading = false
+            console.log(action.payload);
             if (action.payload !== undefined) {
                 if (action.payload.message === "success") {
+                    state.sendVerificationInProgress = true
                     toast.success('Verification code sent', {
                         position: toast.POSITION.TOP_RIGHT
                     });
@@ -279,8 +295,8 @@ export const userSlice = createSlice({
             }
         },
         [sendVerificationCodeForFP.rejected]: (state) => {
-            state.forgotPasswordInProgress = false
-
+            state.sendVerificationInProgress = false
+            state.sendVerificationLoading = false
             toast.error('Please try again', {
                 position: toast.POSITION.TOP_RIGHT
             });
@@ -288,76 +304,84 @@ export const userSlice = createSlice({
         },
         [verifySecurityCode.pending]: (state) => {
             state.verifyingSecuritycode = true;
+            state.verifySecuritycodeLoading = true;
             console.log("pending")
         },
         [verifySecurityCode.fulfilled]: (state, action) => {
-            console.log("Fulfilled")
+            state.verifyingSecuritycode = false;
+            state.verifySecuritycodeLoading = false;
+            console.log(action.payload);
             if (action.payload !== undefined) {
-                console.log("Fulfilled 1")
-                console.log(action.payload.message)
-                console.log(action.payload.message)
-                state.verifyingSecuritycode = false;
+                console.log(action.payload)
                 if (action.payload.message === "success") {
                     state.verifyingSecuritycode = true;
                     console.log(state.verifyingSecuritycode);
-                    console.log("Fulfilled 2")
                     console.log(action.payload.message)
                     toast.success("Code verified successfully", {
                         position: toast.POSITION.TOP_RIGHT
                     });
 
                 } else {
-                    console.log(action.payload.message)
+                    console.log(action.payload)
                     toast.error(action.payload.message, {
                         position: toast.POSITION.TOP_RIGHT
                     });
                 }
             }
             else {
-                state.verifyingSecuritycode = false;
-                toast.error("Try again after sometime", {
+                
+                toast.error("Please try again", {
                     position: toast.POSITION.TOP_CENTER
                 });
             }
         },
-        [verifySecurityCode.rejected]: (state) => {
+        [verifySecurityCode.rejected]: (state, action) => {
             state.signupInProgress = false
             state.forgotPasswordInProgress = false
+            state.verifySecuritycodeLoading = false
             console.log("Rejected")
+            console.log(action.payload);
             toast.error("Try again after sometime", {
                 position: toast.POSITION.TOP_CENTER
             });
         },
         [updatePassword.pending]: (state) => {
+            state.updatePasswordLoading = true
+            state.passwordResetInProgress = true
+            console.log(state.passwordResetInProgress)
             console.log("pending")
         },
         [updatePassword.fulfilled]: (state, action) => {
             console.log("Fulfilled")
+            state.updatePasswordLoading = false
+            state.passwordResetInProgress = false
             if (action.payload !== undefined) {
-                console.log("Fulfilled 1")
-                console.log(action.payload.message)
                 console.log(action.payload.message)
                 if (action.payload.message === "success") {
-                    console.log("Fulfilled 2")
+                    state.passwordResetInProgress = true
+                    console.log(state.passwordResetInProgress)
                     console.log(action.payload.message)
                     toast.success("Password updated successfully", {
                         position: toast.POSITION.TOP_RIGHT
                     });
-
                 } else {
                     console.log(action.payload.message)
                     toast.error(action.payload.message, {
                         position: toast.POSITION.TOP_RIGHT
                     });
                 }
+                console.log(state.passwordResetInProgress)
             }
             else {
+                state.passwordResetInProgress = false
+                console.log(state.passwordResetInProgress)
                 toast.error("Try again after sometime", {
                     position: toast.POSITION.TOP_CENTER
                 });
             }
         },
         [updatePassword.rejected]: (state) => {
+            state.updatePasswordLoading = false
             console.log("Rejected")
             toast.error("Try again after sometime", {
                 position: toast.POSITION.TOP_CENTER
