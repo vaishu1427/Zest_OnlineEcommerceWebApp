@@ -36,6 +36,7 @@ export default function HomePage() {
     backgroundColor: 'rgba(0,0,0,0.4)',
     zIndex: 9999,
   };
+  
   const featuredProductsSectionRef = useRef(null);
   const handleShopNowClick = () => {
     featuredProductsSectionRef.current.scrollIntoView({ behavior: "smooth" });

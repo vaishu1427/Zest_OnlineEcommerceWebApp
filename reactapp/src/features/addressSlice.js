@@ -172,6 +172,7 @@ export const addressSlice = createSlice({
             if (action.payload !== undefined) {
                 if (action.payload.message === "success") {
                     state.particularAddress = action.payload.data
+                    console.log(state.particularAddress)
                     console.log("Address fetched")
                 } else {
                     console.log(action.payload.message)

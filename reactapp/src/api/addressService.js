@@ -27,7 +27,7 @@ export async function createAddress(token, body) {
 }
 
 export async function getAddressById(addressId) {
-    return await axios.get(`${baseUrl}/address/edit?addressId=${addressId}`)
+    return await axios.get(`${baseUrl}/auth/address/edit?addressId=${addressId}`)
 }
 
 export async function changeAddress(token, body) {

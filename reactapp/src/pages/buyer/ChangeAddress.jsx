@@ -8,6 +8,7 @@ import { fetchAddress } from "../../features/addressSlice";
 import { ReactComponent as Address } from '../../assets/Address.svg';
 import AddressDeleteModal from "../../components/buyer/AddressDeleteModal";
 import EditAddressModal from "../../components/buyer/EditAddressModal";
+import Footer from "../../components/common/Footer";
 
 export default function ChangeAddress() {
     const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -19,12 +20,14 @@ export default function ChangeAddress() {
     const handleCloseAddressModal = () => setShowAddressModal(false);
     const navigate = useNavigate();
     const dispatch = useDispatch()
-    const [selected, setSelected] = useState(null)
+    const [selected, setSelected] = useState('')
     const token = useSelector(state => state.user.token)
+    const addressList = useSelector(state => state.address.addressList)
+
     useEffect(() => {
         dispatch(fetchAddress({ token: token }))
     }, [])
-    const addressList = useSelector(state => state.address.addressList)
+
     const handleGoBack = () => {
         navigate("/home")
     };
@@ -97,7 +100,9 @@ export default function ChangeAddress() {
             )}
             <AddressDeleteModal addressid={selected} show={showDeletePopup} onHide={handleHideRemoveModal} />
             <AddAddressModal show={showAddressModal} onHide={handleCloseAddressModal} />
-            <EditAddressModal addressid={selected} show={showEditAddressModal} onHide={handleCloseEditAddressModal} />
+            {showEditAddressModal ? <EditAddressModal addressid={selected} show={showEditAddressModal} onHide={handleCloseEditAddressModal} /> : <div></div>}
+            <br/><br/>
+            <Footer/>
         </div>
     )
 }
