@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { MdKeyboardBackspace } from 'react-icons/md';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-
+import Footer from '../../components/common/Footer';
 
 export default function SellerProfile() {
   const [firstname, setFirstName] = useState('');
@@ -178,6 +178,7 @@ export default function SellerProfile() {
         </h6>
         <br />
       </div>
+      <Footer/>
     </div>
   );
 }
