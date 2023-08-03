@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8081/")
 public class AddressController {
 
     @Autowired
@@ -25,63 +26,64 @@ public class AddressController {
     AddressService addressService;
 
     @GetMapping("/api/address")
-    public ResponseEntity<BaseResponseDTO> getAddress(@RequestHeader(value = "Authorization", defaultValue = "") String token){
-        try{
+    public ResponseEntity<BaseResponseDTO> getAddress(@RequestHeader(value = "Authorization", defaultValue = "") String token) {
+        try {
             User user = userRepository.findByEmail(tokenProvider.getUsernameFromToken(tokenProvider.getTokenFromHeader(token))).orElseThrow();
             List<Address> addressList = addressService.getAddress(user);
-            return ResponseEntity.ok(new BaseResponseDTO("success",addressList));
-        }catch (Exception e){
+            return ResponseEntity.ok(new BaseResponseDTO("success", addressList));
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(new BaseResponseDTO("failed"));
         }
     }
 
-    @GetMapping("/api/address/edit")
-    public ResponseEntity<BaseResponseDTO> getAddressById(@RequestParam String addressId){
-        try{
+    @GetMapping("/api/auth/address/edit")
+    public ResponseEntity<BaseResponseDTO> getAddressById(@RequestParam String addressId) {
+        try {
             Address address = addressService.getAddressById(Integer.parseInt(addressId));
-            return ResponseEntity.ok(new BaseResponseDTO("success",address));
-        }catch (Exception e){
+            return ResponseEntity.ok(new BaseResponseDTO("success", address));
+        } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.internalServerError().body(new BaseResponseDTO("failed"));
         }
     }
 
     @PostMapping("/api/address")
-    public ResponseEntity<BaseResponseDTO> addAddress(@RequestHeader(value = "Authorization", defaultValue = "") String token, @RequestBody Address address){
-        try{
+    public ResponseEntity<BaseResponseDTO> addAddress(@RequestHeader(value = "Authorization", defaultValue = "") String token, @RequestBody Address address) {
+        try {
             User user = userRepository.findByEmail(tokenProvider.getUsernameFromToken(tokenProvider.getTokenFromHeader(token))).orElseThrow();
-            addressService.addAddress(user,address);
+            addressService.addAddress(user, address);
             return ResponseEntity.ok(new BaseResponseDTO("success"));
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(new BaseResponseDTO("failed"));
         }
     }
 
     @PutMapping("/api/address")
-    public ResponseEntity<BaseResponseDTO> updateAddress(@RequestHeader(value = "Authorization", defaultValue = "") String token,@RequestBody Address address,@RequestParam String addressId){
-        try{
+    public ResponseEntity<BaseResponseDTO> updateAddress(@RequestHeader(value = "Authorization", defaultValue = "") String token, @RequestBody Address address, @RequestParam String addressId) {
+        try {
             User user = userRepository.findByEmail(tokenProvider.getUsernameFromToken(tokenProvider.getTokenFromHeader(token))).orElseThrow();
-            if(addressService.hasUser(user, Integer.valueOf(addressId))){
-                addressService.updateAddress(address,Integer.valueOf(addressId));
+            if (addressService.hasUser(user, Integer.valueOf(addressId))) {
+                addressService.updateAddress(address, Integer.valueOf(addressId));
                 return ResponseEntity.ok(new BaseResponseDTO("success"));
-            }else {
+            } else {
                 return ResponseEntity.ok(new BaseResponseDTO("something went wrong"));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(new BaseResponseDTO("failed"));
         }
     }
 
     @DeleteMapping("/api/address")
-    public ResponseEntity<BaseResponseDTO> deleteAddress(@RequestHeader(value = "Authorization", defaultValue = "") String token,@RequestParam String addressId){
-        try{
+    public ResponseEntity<BaseResponseDTO> deleteAddress(@RequestHeader(value = "Authorization", defaultValue = "") String token, @RequestParam String addressId) {
+        try {
             User user = userRepository.findByEmail(tokenProvider.getUsernameFromToken(tokenProvider.getTokenFromHeader(token))).orElseThrow();
-            if(addressService.hasUser(user,Integer.valueOf(addressId))){
+            if (addressService.hasUser(user, Integer.valueOf(addressId))) {
                 addressService.deleteAddress(Integer.valueOf(addressId));
                 return ResponseEntity.ok(new BaseResponseDTO("success"));
-            }else {
+            } else {
                 return ResponseEntity.ok(new BaseResponseDTO("something went wrong"));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(new BaseResponseDTO("failed"));
         }
     }

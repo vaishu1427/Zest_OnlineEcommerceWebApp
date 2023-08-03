@@ -184,7 +184,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void sendVerificationEmail(String email) throws MessagingException, UnsupportedEncodingException {
-        String fromAddress = "zest.pvt.ltd@outlook.com";
+        String fromAddress = "zest.ltd@outlook.com";
         String senderName = "Zest Team";
         String subject = "Zest account security code";
         String content = "<div>\n" +
